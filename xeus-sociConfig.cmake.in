@@ -1,0 +1,46 @@
+############################################################################
+# Copyright (c) 2018, Martin Renou, Johan Mabille, Sylvain Corlay and      #
+# Wolf Vollprecht, Mariana Meireles                                        #
+#                                                                          #
+# Distributed under the terms of the BSD 3-Clause License.                 #
+#                                                                          #
+# The full license is in the file LICENSE, distributed with this software. #
+############################################################################
+
+# xeus-soci cmake module
+# This module sets the following variables in your project::
+#
+#   xeus-soci_FOUND - true if xeus-soci found on the system
+#   xeus-soci_INCLUDE_DIRS - the directory containing xeus-soci headers
+#   xeus-soci_LIBRARY - the library for dynamic linking
+#   xeus-soci_STATIC_LIBRARY - the library for static linking
+
+@PACKAGE_INIT@
+
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR};${CMAKE_MODULE_PATH}")
+
+@XEUS_CONFIG_CODE@
+
+include(CMakeFindDependencyMacro)
+find_dependency(xeus @xeus_REQUIRED_VERSION@)
+find_dependency(xvega @xvega_REQUIRED_VERSION@)
+find_dependency(xvega-bindings @xvega-bindings_REQUIRED_VERSION@)
+
+find_dependency(Soci @Soci_REQUIRED_VERSION@)
+find_dependency(SQLite3)
+find_dependency(mysql)
+find_dependency(postgresql)
+
+find_dependency(Threads @Threads_REQUIRED_VERSION@)
+find_dependency(tabulate @tabulate_REQUIRED_VERSION@)
+
+if (NOT TARGET xeus-soci)
+    include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Targets.cmake")
+
+    get_target_property(@PROJECT_NAME@_INCLUDE_DIR xeus-soci INTERFACE_INCLUDE_DIRECTORIES)
+    get_target_property(@PROJECT_NAME@_LIBRARY xeus-soci LOCATION)
+
+    if (TARGET xeus-soci-static)
+        get_target_property(@PROJECT_NAME@_STATIC_LIBRARY xeus-soci-static LOCATION)
+    endif ()
+endif ()

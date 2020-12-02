@@ -1,0 +1,9 @@
+{
+    "display_name": "xsqlite",
+    "argv": [
+        "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_BINDIR@/xsqlite",
+        "-f",
+        "{connection_file}"
+    ],
+    "language": "sqlite"
+}

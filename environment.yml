@@ -1,0 +1,5 @@
+name: xeus-soci
+channels:
+  - conda-forge
+dependencies:
+  - xeus-soci=0.0.1

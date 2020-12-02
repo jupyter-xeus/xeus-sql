@@ -1,0 +1,44 @@
+parameters:
+  - name: 'platform'
+    type: string
+
+steps:
+  - script: |
+      conda config --set always_yes yes --set changeps1 no
+      conda update -q conda
+      conda env create --file environment-dev.yml
+    displayName: Install dependencies
+
+  - script: |
+      source activate xeus-soci
+      conda install gcc_linux-64=7.5.0 gcc_impl_linux-64=7.5.0 gxx_linux-64=7.5.0 gxx_impl_linux-64 -c conda-forge;
+    condition: eq('${{ parameters.platform }}', 'Linux')
+    displayName: Install conda-forge compilers
+
+  - script: |
+      source activate xeus-soci
+      mkdir build
+      cd build
+      if [[ $(xsql_used_shared_xeus_soci) == '0' ]]; then
+        CMAKE_EXTRA_ARGS="$CMAKE_EXTRA_ARGS -DXSQL_BUILD_SHARED=OFF -DXSQL_USE_SHARED_XEUS_soci=OFF";
+      fi
+      if [[ $(xsql_used_shared_xeus) == '0' ]]; then
+        CMAKE_EXTRA_ARGS="$CMAKE_EXTRA_ARGS -DXSQL_USE_SHARED_XEUS=OFF";
+      fi
+      # The xeus conda package is built with CMAKE_CXX_STANDARD=17
+      CMAKE_EXTRA_ARGS="$CMAKE_EXTRA_ARGS -DCMAKE_CXX_STANDARD=17";
+      cmake -D CMAKE_PREFIX_PATH=$CONDA_PREFIX -D CMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DXSQL_DOWNLOAD_GTEST=ON -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX ${CMAKE_EXTRA_ARGS} $(Build.SourcesDirectory)
+    displayName: Configure xeus-soci
+    workingDirectory: $(Build.BinariesDirectory)
+
+  - script: |
+      source activate xeus-soci
+      make install -j2
+    displayName: Build xeus-soci
+    workingDirectory: $(Build.BinariesDirectory)/build
+
+  - script: |
+      source activate xeus-soci
+      ./test_xeus_soci
+    displayName: Test xeus-soci (C++)
+    workingDirectory: $(Build.BinariesDirectory)/build/test

@@ -1,0 +1,21 @@
+name: xeus-soci
+channels:
+  - conda-forge
+dependencies:
+  # Builde dependencies
+  - cmake
+  # host dependencies
+  - nlohmann_json
+  - xtl
+  - cppzmq
+  - xeus
+  - sqlite
+  - mysql
+  - postgresql
+  - soci
+  - cpp-tabulate=1.3
+  - xvega
+  - xproperty
+  # Test dependencies
+  - pytest
+  - jupyter_kernel_test
