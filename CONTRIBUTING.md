@@ -17,7 +17,7 @@ The Xeus team organizes public video meetings. The schedule for future meetings 
 To install the xeus-soci dependencies:
 
 ```bash
-conda install cmake nlohmann_json xtl cppzmq xeus sqlite mysql sqlite postgresql cpp-tabulate=1.3 xvega xvega-bindings xproperty jupyterlab -c conda-forge
+conda install cmake nlohmann_json xtl cppzmq xeus mysql sqlite postgresql cpp-tabulate=1.3 xvega xvega-bindings xproperty jupyterlab -c conda-forge
 ```
 
 Then you can compile the sources
