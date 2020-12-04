@@ -26,7 +26,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 # Versioning
 # ==========
 
-file(STRINGS "${XEUS_SOCI_INCLUDE_DIR}/xeus-soci/xeus_sOCI_config.hpp" xsoci_version_defines
+file(STRINGS "${XEUS_SOCI_INCLUDE_DIR}/xeus-soci/xeus_soci_config.hpp" xsoci_version_defines
      REGEX "#define XSOCI_VERSION_(MAJOR|MINOR|PATCH)")
 foreach(ver ${xsoci_version_defines})
     if(ver MATCHES "#define XSOCI_VERSION_(MAJOR|MINOR|PATCH) +([^ ]+) *$")
@@ -74,15 +74,11 @@ find_package(xeus ${xeus_REQUIRED_VERSION} REQUIRED)
 find_package(xvega REQUIRED)
 find_package(xvega-bindings REQUIRED)
 
-find_package(Soci REQUIRED MODULE)
-find_package(SQLite3)
-find_package(postgresql)
-find_package(mysql)
-
 find_package(tabulate REQUIRED)
 find_package(Threads REQUIRED)
 
-add_definitions(-DSQLITE_ENABLE_EXPLAIN_COMMENTS=1 -DSQLITE_DEBUG=1 -DSQLITE_MEMDEBUG=1)
+find_package(Soci REQUIRED MODULE)
+find_package(PostgreSQL)
 
 # Target and link
 # ===============
@@ -92,9 +88,12 @@ set(XEUS_SOCI_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # xeus-soci source files
 set(XEUS_SOCI_SRC
+    ${XEUS_SOCI_SRC_DIR}/xeus_soci_interpreter.cpp
 )
 
 set(XEUS_SOCI_HEADERS
+    include/xeus-soci/xeus_soci_config.hpp
+    include/xeus-soci/xeus_soci_interpreter.hpp
 )
 
 set(XSOCI_SRC ${XEUS_SOCI_SRC_DIR}/main.cpp)
@@ -214,7 +213,6 @@ macro(xsoci_create_target target_name linkage output_name)
       ${XSOCI_XEUS_TARGET}
       xvega
       ${SOCI_LIBRARY}
-      SQLite::SQLite3
     )
 
     # find_package(Threads) # TODO: add Threads as a dependence of xeus-static?
