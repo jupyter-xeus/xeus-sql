@@ -12,26 +12,24 @@
 
 #include "nlohmann/json.hpp"
 #include "xeus/xinterpreter.hpp"
+#include "xvega-bindings/xvega_bindings.hpp"
+
+#include "xeus_soci_interpreter.hpp"
+#include "xeus_soci_config.hpp"
+
 
 namespace nl = nlohmann;
 
-namespace xeus_sqlite
+namespace xeus_soci
 {
-    class XEUS_SQLITE_API interpreter : public xeus::xinterpreter
+    class XEUS_SOCI_API interpreter : public xeus::xinterpreter
     {
-    friend class SQLite::Database;
-
     public:
 
         interpreter() = default;
         virtual ~interpreter() = default;
 
     private:
-        std::unique_ptr<SQLite::Database> m_db = nullptr;
-        std::unique_ptr<SQLite::Database> m_backup_db = nullptr;
-        bool m_bd_is_loaded = false;
-        std::string m_db_path;
-
         void configure_impl() override;
         nl::json execute_request_impl(int execution_counter,
                                       const std::string& code,
@@ -47,6 +45,10 @@ namespace xeus_sqlite
         nl::json is_complete_request_impl(const std::string& code) override;
         nl::json kernel_info_request_impl() override;
         void shutdown_request_impl() override;
+
+        void process_SQL_input(int execution_counter,
+                               const std::string& code,
+                               xv::df_type& xv_sqlite_df);
     };
 }
 

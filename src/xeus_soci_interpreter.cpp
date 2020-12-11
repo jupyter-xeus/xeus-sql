@@ -1,5 +1,5 @@
 /***************************************************************************
-* Copyright (c) 2020, QuantStack and xeus-SQLite contributors              *
+* Copyright (c) 2020, QuantStack and xeus-soci contributors                *
 *                                                                          *
 *                                                                          *
 * Distributed under the terms of the BSD 3-Clause License.                 *
@@ -16,32 +16,26 @@
 #include <vector>
 #include <tuple>
 
-#include "xvega-bindings/xvega-bindings.hpp"
-#include "xeus/xinterpreter.hpp"
 #include "tabulate/table.hpp"
+#include "xeus/xinterpreter.hpp"
 
 #include "xeus-soci/xeus_soci_interpreter.hpp"
 
 #include "soci/soci.h"
-#include "soci/sqlite3/soci-sqlite3.h"
-
-#include <SQLiteCpp/VariadicBind.h>
-#include <SQLiteCpp/SQLiteCpp.h>
-
-namespace xeus_sqlite
+#include "soci/postgresql/soci-postgresql.h"
+namespace xeus_soci
 {
 
     void interpreter::configure_impl()
     {
     }
 
-
     void interpreter::process_SQL_input(int execution_counter,
-                                        std::unique_ptr<SQLite::Database> &m_db,
                                         const std::string& code,
-                                        xv::df_type& xv_sqlite_df)
+                                        xv::df_type& xv_soci_df)
     {
         std::cout << "Happily processing code\n";
+        soci::session sql("postgresql", "dbname=../examples/chinook.db");
         std::cout << "Finished processing code\n";
     //     SQLite::Statement query(*m_db, code);
     //     nl::json pub_data;
@@ -73,7 +67,7 @@ namespace xeus_sqlite
     //             html_table << "<th>" << name << "</th>\n";
 
     //             /* Build application/vnd.vegalite.v3+json output */
-    //             xv_sqlite_df[name] = { "name" };
+    //             xv_soci_df[name] = { "name" };
     //         }
     //         /* Builds text/plain output */
     //         plain_table.add_row(col_names);
@@ -106,7 +100,7 @@ namespace xeus_sqlite
     //                 html_table << "<td>" << cell << "</td>\n";
 
     //                 /* Build application/vnd.vegalite.v3+json output */
-    //                 xv_sqlite_df[col_name].push_back(cell);
+    //                 xv_soci_df[col_name].push_back(cell);
     //             }
     //             /* Builds text/html output */
     //             html_table << "</tr>\n";
@@ -145,7 +139,7 @@ namespace xeus_sqlite
         //TODO: but it ends up being used in process_SQL_input, that's why
         // //it's initialized here. Not the best approach, this should be
         // //compartimentilized under xvega domain.
-        // xv::df_type xv_sqlite_df;
+        xv::df_type xv_soci_df;
 
         try
         {
@@ -156,26 +150,24 @@ namespace xeus_sqlite
                 tokenized_input[0].erase(0, 1);
 
                 /* Runs SQL magic */
-                parse_SQL_magic(execution_counter, tokenized_input);
+                // parse_SQL_magic(execution_counter, tokenized_input);
 
-                /* Runs xvega magic and SQLite code */
+                /* Runs xvega magic and SQL code */
                 if(xv_bindings::is_xvega(tokenized_input))
                 {
                     /* Removes XVEGA_PLOT command */
                     tokenized_input.erase(tokenized_input.begin());
 
                     nl::json chart;
-                    std::vector<std::string> xvega_input, sqlite_input;
+                    std::vector<std::string> xvega_input, sql;
 
-                    std::tie(xvega_input, sqlite_input) = 
-                        xv_sqlite::split_xv_sqlite_input(tokenized_input);
+                    // std::tie(xvega_input, sql) = 
+                    //     xv_soci::split_xv_soci_input(tokenized_input);
 
-                    process_SQL_input(execution_counter,
-                                         soci_tabl,
-                                         xv_sqlite_df);
+                    // process_SQL_input(execution_counter, code, xv_soci_df);
 
                     chart = xv_bindings::process_xvega_input(xvega_input,
-                                                           xv_sqlite_df);
+                                                             xv_soci_df);
 
                     publish_execution_result(execution_counter,
                                              std::move(chart),
@@ -185,7 +177,7 @@ namespace xeus_sqlite
             /* Runs SQL code */
             else
             {
-                process_SQL_input(execution_counter, m_db, code, xv_sqlite_df);
+                process_SQL_input(execution_counter, code, xv_soci_df);
             }
 
             nl::json jresult;
@@ -238,7 +230,7 @@ namespace xeus_sqlite
         result["implementation"] = "xsoci";
         result["implementation_version"] = XSOCI_VERSION;
 
-        /* The jupyter-console banner for xeus-sqlite is the following:
+        /* The jupyter-console banner for xeus-soci is the following:
                                                                                               _|
             _|    _|    _|_|    _|    _|    _|_|_|                _|_|_|    _|_|      _|_|_|    
               _|_|    _|_|_|_|  _|    _|  _|_|      _|_|_|_|_|  _|_|      _|    _|  _|        _|
@@ -255,7 +247,7 @@ namespace xeus_sqlite
             "_|    _|  _|        _|    _|      _|_|                  _|_|  _|    _|  _|        _|"
             "_|    _|    _|_|_|    _|_|_|  _|_|_|                _|_|_|      _|_|      _|_|_|  _|"
             "  xeus-soci: a Jupyter kernel for SOCI\n"
-            "  soci version: ";
+            "  SOCI version: ";
         banner.append(XSOCI_VERSION);
 
         result["banner"] = banner;
