@@ -1,6 +1,6 @@
 # Contributing to xeus-soci
 
-Xeus and xeus-sqlite are subprojects of Project Jupyter and subject to the [Jupyter governance](https://github.com/jupyter/governance) and [Code of conduct](https://github.com/jupyter/governance/blob/master/conduct/code_of_conduct.md).
+Xeus and xeus-soci are subprojects of Project Jupyter and subject to the [Jupyter governance](https://github.com/jupyter/governance) and [Code of conduct](https://github.com/jupyter/governance/blob/master/conduct/code_of_conduct.md).
 
 ## General Guidelines
 
@@ -17,7 +17,7 @@ The Xeus team organizes public video meetings. The schedule for future meetings 
 To install the xeus-soci dependencies:
 
 ```bash
-conda install cmake nlohmann_json xtl cppzmq xeus mysql sqlite postgresql cpp-tabulate=1.3 xvega xvega-bindings xproperty jupyterlab -c conda-forge
+mamba install cmake nlohmann_json xtl cppzmq xeus mysql sqlite postgresql cpp-tabulate=1.3 xvega xvega-bindings xproperty jupyterlab -c conda-forge
 ```
 
 Then you can compile the sources
@@ -38,4 +38,4 @@ mamba install sphinx breathe doxygen sphinx_rtd_theme
 
 #### Tips on subprojects:
 
-To build SOCI from source using a conda environment: `cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -G "Unix Makefiles" -DWITH_BOOST=OFF -DSOCI_CXX11=ON -DCMAKE_BUILD_TYPE=Release ..`
+To build SOCI from source using a mamba environment: `cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -G "Unix Makefiles" -DWITH_BOOST=OFF -DSOCI_CXX11=ON -DCMAKE_BUILD_TYPE=Release ..`
