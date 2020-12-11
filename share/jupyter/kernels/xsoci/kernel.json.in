@@ -1,7 +1,7 @@
 {
-    "display_name": "xsqlite",
+    "display_name": "xsoci",
     "argv": [
-        "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_BINDIR@/xsqlite",
+        "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_BINDIR@/xsoci",
         "-f",
         "{connection_file}"
     ],
