@@ -69,6 +69,7 @@ OPTION(XSOCI_BUILD_TESTS "xeus-soci test suite" OFF)
 
 # Be sure to use recent versions
 set(xeus_REQUIRED_VERSION 0.23.10)
+# set(xvega_bindings_REQUIRED_VERSION 0.0.2)
 
 find_package(xeus ${xeus_REQUIRED_VERSION} REQUIRED)
 find_package(xvega REQUIRED)
@@ -79,6 +80,8 @@ find_package(Threads REQUIRED)
 
 find_package(Soci REQUIRED MODULE)
 find_package(PostgreSQL)
+find_package(mysql)
+find_package(SQLite3)
 
 # Target and link
 # ===============
@@ -106,7 +109,13 @@ include(CheckCXXCompilerFlag)
 set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
 string(TOUPPER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 
-set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib; ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+
+# Transitive dependencies are not being picked up by xeus-soci.
+# E.g. without this option libpq fails to be loaded by libsoci_postgresql, which is loaded
+# by libsoci_core, which is loaded by us.
+# source: https://github.com/chenxiaolong/DualBootPatcher/pull/548
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--disable-new-dtags")
 
 macro(xsoci_set_common_options target_name)
     if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR
