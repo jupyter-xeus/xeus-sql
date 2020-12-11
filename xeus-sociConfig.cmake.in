@@ -29,7 +29,7 @@ find_dependency(xvega-bindings @xvega-bindings_REQUIRED_VERSION@)
 find_dependency(Soci @Soci_REQUIRED_VERSION@)
 find_dependency(SQLite3)
 find_dependency(mysql)
-find_dependency(postgresql)
+find_dependency(PostgreSQL)
 
 find_dependency(Threads @Threads_REQUIRED_VERSION@)
 find_dependency(tabulate @tabulate_REQUIRED_VERSION@)
