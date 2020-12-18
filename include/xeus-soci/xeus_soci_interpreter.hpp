@@ -1,5 +1,5 @@
 /***************************************************************************
-* Copyright (c) 2020, QuantStack and xeus-SQLite contributors              *
+* Copyright (c) 2020, QuantStack and xeus-soci contributors                *
 *                                                                          *
 *                                                                          *
 * Distributed under the terms of the BSD 3-Clause License.                 *
@@ -12,6 +12,7 @@
 
 #include "nlohmann/json.hpp"
 #include "xeus/xinterpreter.hpp"
+#include "soci/soci.h"
 #include "xvega-bindings/xvega_bindings.hpp"
 
 #include "xeus_soci_interpreter.hpp"
@@ -25,7 +26,6 @@ namespace xeus_soci
     class XEUS_SOCI_API interpreter : public xeus::xinterpreter
     {
     public:
-
         interpreter() = default;
         virtual ~interpreter() = default;
 
@@ -49,6 +49,7 @@ namespace xeus_soci
         void process_SQL_input(int execution_counter,
                                const std::string& code,
                                xv::df_type& xv_sqlite_df);
+        std::unique_ptr<soci::session> sql;
     };
 }
 

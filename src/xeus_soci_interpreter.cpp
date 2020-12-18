@@ -9,20 +9,25 @@
 
 #include <cctype>
 #include <cstdio>
+#include <ctime>
 #include <fstream>
 #include <memory>
+#include <set>
 #include <sstream>
-#include <stack>
 #include <vector>
 #include <tuple>
+
 
 #include "tabulate/table.hpp"
 #include "xeus/xinterpreter.hpp"
 
 #include "xeus-soci/xeus_soci_interpreter.hpp"
 
-#include "soci/soci.h"
-#include "soci/postgresql/soci-postgresql.h"
+#include "xeus-soci/soci_handler.hpp"
+
+// #include "soci/soci.h"
+// #include "soci/postgresql/soci-postgresql.h"
+
 namespace xeus_soci
 {
 
@@ -34,95 +39,83 @@ namespace xeus_soci
                                         const std::string& code,
                                         xv::df_type& xv_soci_df)
     {
-        std::cout << "Happily processing code\n";
-        soci::session sql("postgresql", "dbname=../examples/chinook.db");
-        std::cout << "Finished processing code\n";
-    //     SQLite::Statement query(*m_db, code);
-    //     nl::json pub_data;
+        nl::json pub_data;
+        std::vector<std::string> plain_table_header;
+        std::vector<std::string> plain_table_row;
 
-    //     /* Builds text/plain output */
-    //     tabulate::Table plain_table;
+        //IF IS A SELECT IF NOT DONT ENTER HERE, THIS IS NOT LIKE SQLITE3 & UR ALLOWED TO DO OPERATIONS
 
-    //     /* Builds text/html output */
-    //     std::stringstream html_table("");
+        tabulate::Table plain_table;
+        std::stringstream html_table("");
 
-    //     if (query.getColumnCount() != 0)
-    //     {
-    //         std::vector<std::variant<
-    //                         std::string,
-    //                         const char*,
-    //                         tabulate::Table>> col_names;
+        soci::rowset<soci::row> rows = ((*this->sql).prepare << code);
 
-    //         /* Builds text/html output */
-    //         html_table << "<table>\n<tr>\n";
+        /* Builds table header */
+        const soci::row& first_row = *rows.begin();
 
-    //         /* Iterates through cols name and build table's title row */
-    //         for (int col = 0; col < query.getColumnCount(); col++) {
-    //             std::string name = query.getColumnName(col);
+        html_table << "<table>\n<tr>\n";
+        for(std::size_t i = 0; i < first_row.size(); ++i)
+        {
+            std::string name = first_row.get_properties(i).get_name();
+            html_table << "<th>" << name << "</th>\n";
+            xv_soci_df[name] = { "name" };
+            plain_table_header.push_back(name);
+        }
+        html_table << "</tr>\n";
 
-    //             /* Builds text/plain output */
-    //             col_names.push_back(name);
+        /* Builds table body */
+        for (const soci::row& r : rows)
+        {
+            /* Iterates through cols' rows and builds different kinds of
+               outputs
+            */
+            html_table << "<tr>\n";
+            for(std::size_t i = 0; i != r.size(); ++i)
+            {
+                std::string cell;
 
-    //             /* Builds text/html output */
-    //             html_table << "<th>" << name << "</th>\n";
+                soci::column_properties props = r.get_properties(i);
+                switch(props.get_data_type())
+                {
+                    case soci::dt_string:
+                        cell = r.get<std::string>(i);
+                        break;
+                    case soci::dt_double:
+                        cell = std::to_string(r.get<double>(i));
+                        break;
+                    case soci::dt_integer:
+                        cell = std::to_string(r.get<int>(i));
+                        break;
+                    case soci::dt_long_long:
+                        cell = std::to_string(r.get<long long>(i));
+                        break;
+                    case soci::dt_unsigned_long_long:
+                        cell = std::to_string(r.get<unsigned long long>(i));
+                        break;
+                    // case soci::dt_date:
+                    //     std::tm when = r.get<std::tm>(i);
+                    //     cell = std::to_string(asctime(&when));
+                    //     break;
+                }
+                html_table << "<td>" << cell << "</td>\n";
+                plain_table_row.push_back(cell);
+                xv_soci_df[r.get_properties(i).get_name()].push_back(cell);
+            }
+                html_table << "</tr>\n";
+        }
+        html_table << "</table>";
 
-    //             /* Build application/vnd.vegalite.v3+json output */
-    //             xv_soci_df[name] = { "name" };
-    //         }
-    //         /* Builds text/plain output */
-    //         plain_table.add_row(col_names);
+        pub_data["text/plain"] = plain_table.str();
+        pub_data["text/html"] = html_table.str();
 
-    //         /* Builds text/html output */
-    //         html_table << "</tr>\n";
-
-    //         /* Iterates through cols' rows and builds different kinds of
-    //            outputs
-    //         */
-    //         while (query.executeStep())
-    //         {
-    //              Builds text/html output 
-    //             html_table << "<tr>\n";
-
-    //             std::vector<std::variant<
-    //                             std::string,
-    //                             const char*,
-    //                             tabulate::Table>> row;
-
-    //             for (int col = 0; col < query.getColumnCount(); col++) {
-    //                 std::string col_name;
-    //                 col_name = query.getColumnName(col);
-    //                 std::string cell = query.getColumn(col);
-
-    //                 /* Builds text/plain output */
-    //                 row.push_back(cell);
-
-    //                 /* Builds text/html output */
-    //                 html_table << "<td>" << cell << "</td>\n";
-
-    //                 /* Build application/vnd.vegalite.v3+json output */
-    //                 xv_soci_df[col_name].push_back(cell);
-    //             }
-    //             /* Builds text/html output */
-    //             html_table << "</tr>\n";
-
-    //             /* Builds text/plain output */
-    //             plain_table.add_row(row);
-    //         }
-    //         /* Builds text/html output */
-    //         html_table << "</table>";
-
-    //         pub_data["text/plain"] = plain_table.str();
-    //         pub_data["text/html"] = html_table.str();
-
-    //         publish_execution_result(execution_counter,
-    //                                     std::move(pub_data),
-    //                                     nl::json::object());
-    //     }
+        publish_execution_result(execution_counter,
+                                std::move(pub_data),
+                                nl::json::object());
+        }
     //     else
     //     {
     //         query.exec();
     //     }
-    }
 
     nl::json interpreter::execute_request_impl(int execution_counter,
                                                const std::string& code,
@@ -135,12 +128,7 @@ namespace xeus_soci
         std::string sanitized_code = xv_bindings::sanitize_string(code);
         std::vector<std::string> tokenized_input = xv_bindings::tokenizer(sanitized_code);
 
-        /* This structure is only used when xvega code is run */
-        //TODO: but it ends up being used in process_SQL_input, that's why
-        // //it's initialized here. Not the best approach, this should be
-        // //compartimentilized under xvega domain.
         xv::df_type xv_soci_df;
-
         try
         {
             /* Runs magic */
@@ -149,9 +137,6 @@ namespace xeus_soci
                 /* Removes "%" symbol */
                 tokenized_input[0].erase(0, 1);
 
-                /* Runs SQL magic */
-                // parse_SQL_magic(execution_counter, tokenized_input);
-
                 /* Runs xvega magic and SQL code */
                 if(xv_bindings::is_xvega(tokenized_input))
                 {
@@ -159,12 +144,15 @@ namespace xeus_soci
                     tokenized_input.erase(tokenized_input.begin());
 
                     nl::json chart;
-                    std::vector<std::string> xvega_input, sql;
+                    std::vector<std::string> xvega_input, sql_input;
 
-                    // std::tie(xvega_input, sql) = 
-                    //     xv_soci::split_xv_soci_input(tokenized_input);
+                    std::tie(xvega_input, sql_input) = split_xv_soci_input(tokenized_input);
+                    std::stringstream stringfied_soci_input;
+                    for (size_t i = 0; i < sql_input.size(); i++) {
+                        stringfied_soci_input << " " << sql_input[i];
+                    }
 
-                    // process_SQL_input(execution_counter, code, xv_soci_df);
+                    process_SQL_input(execution_counter, stringfied_soci_input.str(), xv_soci_df);
 
                     chart = xv_bindings::process_xvega_input(xvega_input,
                                                              xv_soci_df);
@@ -172,12 +160,32 @@ namespace xeus_soci
                     publish_execution_result(execution_counter,
                                              std::move(chart),
                                              nl::json::object());
+
+                    nl::json jresult;
+                    jresult["status"] = "ok";
+                    jresult["payload"] = nl::json::array();
+                    jresult["user_expressions"] = nl::json::object();
+                    return jresult;
                 }
+
+                /* Parses SQL magic */
+                this->sql = parse_SQL_magic(tokenized_input);
+
+                /* Runs SQL magic */
+                // isso aqui tava rodando o SQL ate quando era magic
+                //process_SQL_input(execution_counter, code, xv_soci_df);
             }
             /* Runs SQL code */
             else
             {
-                process_SQL_input(execution_counter, code, xv_soci_df);
+                if (this->sql)
+                {
+                    process_SQL_input(execution_counter, code, xv_soci_df);
+                }
+                else
+                {
+                    throw("Database was not loaded.");
+                }
             }
 
             nl::json jresult;
