@@ -19,15 +19,15 @@ steps:
       source activate xeus-soci
       mkdir build
       cd build
-      if [[ $(xsql_used_shared_xeus_soci) == '0' ]]; then
-        CMAKE_EXTRA_ARGS="$CMAKE_EXTRA_ARGS -DXSQL_BUILD_SHARED=OFF -DXSQL_USE_SHARED_XEUS_soci=OFF";
+      if [[ $(xsoci_used_shared_xeus_soci) == '0' ]]; then
+        CMAKE_EXTRA_ARGS="$CMAKE_EXTRA_ARGS -DXSOCI_BUILD_SHARED=OFF -DXSOCI_USE_SHARED_XEUS_soci=OFF";
       fi
-      if [[ $(xsql_used_shared_xeus) == '0' ]]; then
-        CMAKE_EXTRA_ARGS="$CMAKE_EXTRA_ARGS -DXSQL_USE_SHARED_XEUS=OFF";
+      if [[ $(xsoci_used_shared_xeus) == '0' ]]; then
+        CMAKE_EXTRA_ARGS="$CMAKE_EXTRA_ARGS -DXSOCI_USE_SHARED_XEUS=OFF";
       fi
       # The xeus conda package is built with CMAKE_CXX_STANDARD=17
       CMAKE_EXTRA_ARGS="$CMAKE_EXTRA_ARGS -DCMAKE_CXX_STANDARD=17";
-      cmake -D CMAKE_PREFIX_PATH=$CONDA_PREFIX -D CMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DXSQL_DOWNLOAD_GTEST=ON -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX ${CMAKE_EXTRA_ARGS} $(Build.SourcesDirectory)
+      cmake -D CMAKE_PREFIX_PATH=$CONDA_PREFIX -D CMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DXSOCI_DOWNLOAD_GTEST=ON -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX ${CMAKE_EXTRA_ARGS} $(Build.SourcesDirectory)
     displayName: Configure xeus-soci
     workingDirectory: $(Build.BinariesDirectory)
 

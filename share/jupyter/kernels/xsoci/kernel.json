@@ -1,7 +1,7 @@
 {
-    "display_name": "xsqlite",
+    "display_name": "xsoci",
     "argv": [
-        "/home/mariana/miniconda3/envs/soci/bin/xsqlite",
+        "/home/mariana/miniconda3/envs/xeus-soci/bin/xsoci",
         "-f",
         "{connection_file}"
     ],

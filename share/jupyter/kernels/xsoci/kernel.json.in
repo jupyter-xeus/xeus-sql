@@ -1,0 +1,9 @@
+{
+    "display_name": "xsoci",
+    "argv": [
+        "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_BINDIR@/xsoci",
+        "-f",
+        "{connection_file}"
+    ],
+    "language": "sqlite"
+}

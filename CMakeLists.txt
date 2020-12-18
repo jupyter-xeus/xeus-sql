@@ -26,7 +26,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 # Versioning
 # ==========
 
-file(STRINGS "${XEUS_SOCI_INCLUDE_DIR}/xeus-soci/xeus_sOCI_config.hpp" xsoci_version_defines
+file(STRINGS "${XEUS_SOCI_INCLUDE_DIR}/xeus-soci/xeus_soci_config.hpp" xsoci_version_defines
      REGEX "#define XSOCI_VERSION_(MAJOR|MINOR|PATCH)")
 foreach(ver ${xsoci_version_defines})
     if(ver MATCHES "#define XSOCI_VERSION_(MAJOR|MINOR|PATCH) +([^ ]+) *$")
@@ -69,20 +69,19 @@ OPTION(XSOCI_BUILD_TESTS "xeus-soci test suite" OFF)
 
 # Be sure to use recent versions
 set(xeus_REQUIRED_VERSION 0.23.10)
+set(xvega_bindings_REQUIRED_VERSION 0.0.2)
 
 find_package(xeus ${xeus_REQUIRED_VERSION} REQUIRED)
 find_package(xvega REQUIRED)
-find_package(xvega-bindings REQUIRED)
-
-find_package(Soci REQUIRED MODULE)
-find_package(SQLite3)
-find_package(postgresql)
-find_package(mysql)
+find_package(xvega-bindings ${xvega_bindings_REQUIRED_VERSION} REQUIRED)
 
 find_package(tabulate REQUIRED)
 find_package(Threads REQUIRED)
 
-add_definitions(-DSQLITE_ENABLE_EXPLAIN_COMMENTS=1 -DSQLITE_DEBUG=1 -DSQLITE_MEMDEBUG=1)
+find_package(Soci REQUIRED MODULE)
+find_package(PostgreSQL)
+find_package(mysql)
+find_package(SQLite3)
 
 # Target and link
 # ===============
@@ -92,9 +91,13 @@ set(XEUS_SOCI_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # xeus-soci source files
 set(XEUS_SOCI_SRC
+    ${XEUS_SOCI_SRC_DIR}/xeus_soci_interpreter.cpp
 )
 
 set(XEUS_SOCI_HEADERS
+    include/xeus-soci/soci_handler.hpp
+    include/xeus-soci/xeus_soci_config.hpp
+    include/xeus-soci/xeus_soci_interpreter.hpp
 )
 
 set(XSOCI_SRC ${XEUS_SOCI_SRC_DIR}/main.cpp)
@@ -107,7 +110,13 @@ include(CheckCXXCompilerFlag)
 set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
 string(TOUPPER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 
-set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib; ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+
+# Transitive dependencies are not being picked up by xeus-soci.
+# E.g. without this option libpq fails to be loaded by libsoci_postgresql, which is loaded
+# by libsoci_core, which is loaded by us.
+# source: https://github.com/chenxiaolong/DualBootPatcher/pull/548
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--disable-new-dtags")
 
 macro(xsoci_set_common_options target_name)
     if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR
@@ -214,7 +223,6 @@ macro(xsoci_create_target target_name linkage output_name)
       ${XSOCI_XEUS_TARGET}
       xvega
       ${SOCI_LIBRARY}
-      SQLite::SQLite3
     )
 
     # find_package(Threads) # TODO: add Threads as a dependence of xeus-static?

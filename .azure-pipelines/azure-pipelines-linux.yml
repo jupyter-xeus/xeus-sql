@@ -4,10 +4,10 @@ jobs:
       matrix:
         shared:
           xsql_use_shared_xeus: 1
-          xsql_use_shared_xeus_sqlite: 1
+          xsql_use_shared_xeus_soci: 1
         static:
           xsql_use_shared_xeus: 0
-          xsql_use_shared_xeus_sqlite: 0
+          xsql_use_shared_xeus_soci: 0
     pool:
       vmImage: ubuntu-16.04
     timeoutInMinutes: 360
