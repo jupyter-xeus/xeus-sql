@@ -25,9 +25,6 @@
 
 #include "xeus-soci/soci_handler.hpp"
 
-// #include "soci/soci.h"
-// #include "soci/postgresql/soci-postgresql.h"
-
 namespace xeus_soci
 {
 
@@ -92,10 +89,10 @@ namespace xeus_soci
                     case soci::dt_unsigned_long_long:
                         cell = std::to_string(r.get<unsigned long long>(i));
                         break;
-                    // case soci::dt_date:
-                    //     std::tm when = r.get<std::tm>(i);
-                    //     cell = std::to_string(asctime(&when));
-                    //     break;
+                    case soci::dt_date:
+                        std::tm when = r.get<std::tm>(i);
+                        cell = std::asctime(&when);
+                        break;
                 }
                 html_table << "<td>" << cell << "</td>\n";
                 plain_table_row.push_back(cell);
@@ -180,7 +177,14 @@ namespace xeus_soci
             {
                 if (this->sql)
                 {
-                    process_SQL_input(execution_counter, code, xv_soci_df);
+                    if (xv_bindings::case_insentive_equals("SELECT", tokenized_input[0]))
+                    {
+                        process_SQL_input(execution_counter, code, xv_soci_df);
+                    }
+                    else
+                    {
+                        *this->sql << code;
+                    }
                 }
                 else
                 {

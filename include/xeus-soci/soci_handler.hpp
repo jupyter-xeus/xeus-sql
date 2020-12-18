@@ -29,8 +29,6 @@ namespace xeus_soci
         std::string path = "dbname=" + tokenized_input[2];
         std::string db = tokenized_input[1];
 
-        std::cout << "🌈 gets in load_db " << db << path << std::endl;
-
         return std::make_unique<soci::session>(db, path);
     }
 
