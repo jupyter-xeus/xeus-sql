@@ -69,11 +69,11 @@ OPTION(XSOCI_BUILD_TESTS "xeus-soci test suite" OFF)
 
 # Be sure to use recent versions
 set(xeus_REQUIRED_VERSION 0.23.10)
-# set(xvega_bindings_REQUIRED_VERSION 0.0.2)
+set(xvega_bindings_REQUIRED_VERSION 0.0.2)
 
 find_package(xeus ${xeus_REQUIRED_VERSION} REQUIRED)
 find_package(xvega REQUIRED)
-find_package(xvega-bindings REQUIRED)
+find_package(xvega-bindings ${xvega_bindings_REQUIRED_VERSION} REQUIRED)
 
 find_package(tabulate REQUIRED)
 find_package(Threads REQUIRED)
@@ -95,6 +95,7 @@ set(XEUS_SOCI_SRC
 )
 
 set(XEUS_SOCI_HEADERS
+    include/xeus-soci/soci_handler.hpp
     include/xeus-soci/xeus_soci_config.hpp
     include/xeus-soci/xeus_soci_interpreter.hpp
 )
