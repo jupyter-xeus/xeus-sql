@@ -32,15 +32,13 @@ namespace xeus_soci
     {
     }
 
-    void interpreter::process_SQL_input(int execution_counter,
+    nl::json interpreter::process_SQL_input(int execution_counter,
                                         const std::string& code,
                                         xv::df_type& xv_soci_df)
     {
         nl::json pub_data;
         std::vector<std::string> plain_table_header;
         std::vector<std::string> plain_table_row;
-
-        //IF IS A SELECT IF NOT DONT ENTER HERE, THIS IS NOT LIKE SQLITE3 & UR ALLOWED TO DO OPERATIONS
 
         tabulate::Table plain_table;
         std::stringstream html_table("");
@@ -105,9 +103,11 @@ namespace xeus_soci
         pub_data["text/plain"] = plain_table.str();
         pub_data["text/html"] = html_table.str();
 
-        publish_execution_result(execution_counter,
-                                std::move(pub_data),
-                                nl::json::object());
+        return pub_data;
+
+        // publish_execution_result(execution_counter,
+        //                         std::move(pub_data),
+        //                         nl::json::object());
         }
     //     else
     //     {
@@ -165,22 +165,25 @@ namespace xeus_soci
                     return jresult;
                 }
 
-                /* Parses SQL magic */
+                /* Parses LOAD magic */
                 this->sql = parse_SQL_magic(tokenized_input);
-
-                /* Runs SQL magic */
-                // isso aqui tava rodando o SQL ate quando era magic
-                //process_SQL_input(execution_counter, code, xv_soci_df);
             }
             /* Runs SQL code */
             else
             {
                 if (this->sql)
                 {
+                    /* Shows rich output for tables */
                     if (xv_bindings::case_insentive_equals("SELECT", tokenized_input[0]))
                     {
-                        process_SQL_input(execution_counter, code, xv_soci_df);
+                        nl::json data = process_SQL_input(execution_counter, code, xv_soci_df);
+
+                        publish_execution_result(execution_counter,
+                                                 std::move(data),
+                                                 nl::json::object());
+
                     }
+                    /* Execute all SQL commands that don't output tables */
                     else
                     {
                         *this->sql << code;

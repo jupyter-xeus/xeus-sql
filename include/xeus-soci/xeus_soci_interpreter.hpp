@@ -46,9 +46,9 @@ namespace xeus_soci
         nl::json kernel_info_request_impl() override;
         void shutdown_request_impl() override;
 
-        void process_SQL_input(int execution_counter,
-                               const std::string& code,
-                               xv::df_type& xv_sqlite_df);
+        nl::json process_SQL_input(int execution_counter,
+                                   const std::string& code,
+                                   xv::df_type& xv_sqlite_df);
         std::unique_ptr<soci::session> sql;
     };
 }
