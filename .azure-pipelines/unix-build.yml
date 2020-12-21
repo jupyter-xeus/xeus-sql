@@ -20,7 +20,7 @@ steps:
       mkdir build
       cd build
       if [[ $(xsoci_used_shared_xeus_soci) == '0' ]]; then
-        CMAKE_EXTRA_ARGS="$CMAKE_EXTRA_ARGS -DXSOCI_BUILD_SHARED=OFF -DXSOCI_USE_SHARED_XEUS_soci=OFF";
+        CMAKE_EXTRA_ARGS="$CMAKE_EXTRA_ARGS -DXSOCI_BUILD_SHARED=OFF -DXSOCI_USE_SHARED_XEUS_SOCI=OFF";
       fi
       if [[ $(xsoci_used_shared_xeus) == '0' ]]; then
         CMAKE_EXTRA_ARGS="$CMAKE_EXTRA_ARGS -DXSOCI_USE_SHARED_XEUS=OFF";
