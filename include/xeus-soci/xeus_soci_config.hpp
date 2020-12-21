@@ -11,7 +11,7 @@
 #define XSOCI_CONFIG_HPP
 
 // Project version
-#define XSOCI_VERSION_MAJOR 4
+#define XSOCI_VERSION_MAJOR 0
 #define XSOCI_VERSION_MINOR 0
 #define XSOCI_VERSION_PATCH 1
 
