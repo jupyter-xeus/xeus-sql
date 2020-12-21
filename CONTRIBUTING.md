@@ -1,6 +1,6 @@
 # Contributing to xeus-soci
 
-Xeus and xeus-soci are subprojects of Project Jupyter and subject to the [Jupyter governance](https://github.com/jupyter/governance) and [Code of conduct](https://github.com/jupyter/governance/blob/master/conduct/code_of_conduct.md).
+xeus and xeus-soci are subprojects of Project Jupyter and subject to the [Jupyter governance](https://github.com/jupyter/governance) and [Code of conduct](https://github.com/jupyter/governance/blob/master/conduct/code_of_conduct.md).
 
 ## General Guidelines
 
@@ -8,7 +8,7 @@ For general documentation about contributing to Jupyter projects, see the [Proje
 
 ## Community
 
-The Xeus team organizes public video meetings. The schedule for future meetings and minutes of past meetings can be found on our [team compass](https://jupyter-xeus.github.io/).
+The xeus team organizes public video meetings. The schedule for future meetings and minutes of past meetings can be found on our [team compass](https://jupyter-xeus.github.io/).
 
 ## Setting up a development environment
 
