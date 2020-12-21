@@ -1,7 +1,7 @@
 name: xeus-soci-docs
 
 channels:
-  - conda-forge 
+  - conda-forge
 
 dependencies:
   - breathe
