@@ -69,7 +69,7 @@ OPTION(XSOCI_BUILD_TESTS "xeus-soci test suite" OFF)
 
 # Be sure to use recent versions
 set(xeus_REQUIRED_VERSION 0.23.10)
-set(xvega_bindings_REQUIRED_VERSION 0.0.2)
+set(xvega_bindings_REQUIRED_VERSION 0.0.3)
 
 find_package(xeus ${xeus_REQUIRED_VERSION} REQUIRED)
 find_package(xvega REQUIRED)
