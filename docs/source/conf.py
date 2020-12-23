@@ -23,11 +23,11 @@ def setup(app):
     app.add_stylesheet("main_stylesheet.css")
 
 extensions = ['breathe']
-breathe_projects = { 'xeus-soci': '../xml' }
+breathe_projects = { 'xeus-sql': '../xml' }
 templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
-project = 'xeus-soci'
+project = 'xeus-sql'
 copyright = '2020, Mariana Meireles'
 author = 'Mariana Meireles'
 
@@ -36,4 +36,4 @@ html_logo = 'quantstack-white.svg'
 exclude_patterns = []
 pygments_style = 'sphinx'
 todo_include_todos = False
-htmlhelp_basename = 'xeus-socidoc'
+htmlhelp_basename = 'xeus-sqldoc'

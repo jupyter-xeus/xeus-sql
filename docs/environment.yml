@@ -1,4 +1,4 @@
-name: xeus-soci-docs
+name: xeus-sql-docs
 
 channels:
   - conda-forge

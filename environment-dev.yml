@@ -1,4 +1,4 @@
-name: xeus-soci
+name: xeus-sql
 channels:
   - conda-forge
 dependencies:

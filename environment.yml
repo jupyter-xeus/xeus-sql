@@ -1,5 +1,14 @@
-name: xeus-soci
+name: xeus-sql
 channels:
   - conda-forge
 dependencies:
-  - xeus-soci=0.0.1
+  - xeus
+  - cppzmq
+  - zeromq
+  - nlohmann_json
+  - xtl
+  - cpp-tabulate>=1.3,<2
+  - soci-core
+  - xvega>=0.0.4
+  - xproperty
+  - xvega-bindings

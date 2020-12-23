@@ -7,32 +7,32 @@
 * The full license is in the file LICENSE, distributed with this software. *
 ****************************************************************************/
 
-#ifndef XSOCI_CONFIG_HPP
-#define XSOCI_CONFIG_HPP
+#ifndef XSQL_CONFIG_HPP
+#define XSQL_CONFIG_HPP
 
 // Project version
-#define XSOCI_VERSION_MAJOR 0
-#define XSOCI_VERSION_MINOR 0
-#define XSOCI_VERSION_PATCH 2
+#define XSQL_VERSION_MAJOR 0
+#define XSQL_VERSION_MINOR 0
+#define XSQL_VERSION_PATCH 2
 
 // Composing the version string from major, minor and patch
-#define XSOCI_CONCATENATE(A, B) XSOCI_CONCATENATE_IMPL(A, B)
-#define XSOCI_CONCATENATE_IMPL(A, B) A##B
-#define XSOCI_STRINGIFY(a) XSOCI_STRINGIFY_IMPL(a)
-#define XSOCI_STRINGIFY_IMPL(a) #a
+#define XSQL_CONCATENATE(A, B) XSQL_CONCATENATE_IMPL(A, B)
+#define XSQL_CONCATENATE_IMPL(A, B) A##B
+#define XSQL_STRINGIFY(a) XSQL_STRINGIFY_IMPL(a)
+#define XSQL_STRINGIFY_IMPL(a) #a
 
-#define XSOCI_VERSION XSOCI_STRINGIFY(XSOCI_CONCATENATE(XSOCI_VERSION_MAJOR,     \
-                      XSOCI_CONCATENATE(.,XSOCI_CONCATENATE(XSOCI_VERSION_MINOR, \
-                      XSOCI_CONCATENATE(.,XSOCI_VERSION_PATCH)))))
+#define XSQL_VERSION XSQL_STRINGIFY(XSQL_CONCATENATE(XSQL_VERSION_MAJOR,     \
+                      XSQL_CONCATENATE(.,XSQL_CONCATENATE(XSQL_VERSION_MINOR, \
+                      XSQL_CONCATENATE(.,XSQL_VERSION_PATCH)))))
 
 #ifdef _WIN32
-    #ifdef XEUS_SOCI_EXPORTS
-        #define XEUS_SOCI_API __declspec(dllexport)
+    #ifdef XEUS_SQL_EXPORTS
+        #define XEUS_SQL_API __declspec(dllexport)
     #else
-        #define XEUS_SOCI_API __declspec(dllimport)
+        #define XEUS_SQL_API __declspec(dllimport)
     #endif
 #else
-    #define XEUS_SOCI_API
+    #define XEUS_SQL_API
 #endif
 
 #endif
