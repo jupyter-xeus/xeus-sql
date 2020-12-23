@@ -10,7 +10,7 @@ PostgreSQL
 Linux
 -----
 
-If you're running ``xeus-soci`` with a conda-forge PostgreSQL build, you will have to create a symbolic link to ``/tmp/``:
+If you're running ``xeus-sql`` with a conda-forge PostgreSQL build, you will have to create a symbolic link to ``/tmp/``:
 
 .. code::
 
@@ -32,6 +32,6 @@ Create a database using the example available on this repository:
 
 .. code::
 
-    pg_restore --dbname=newdvdrental -U $USER_NAME pathto/xeus-soci/examples/dvdrental.tar
+    pg_restore --dbname=newdvdrental -U $USER_NAME pathto/xeus-sql/examples/dvdrental.tar
 
 You can now run the example contained in ``examples/PostgrSQL.ipynb``.

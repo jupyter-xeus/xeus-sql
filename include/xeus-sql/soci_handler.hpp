@@ -1,5 +1,5 @@
 /***************************************************************************
-* Copyright (c) 2020, QuantStack and xeus-soci contributors                *
+* Copyright (c) 2020, QuantStack and xeus-sql contributors                *
 *                                                                          *
 *                                                                          *
 * Distributed under the terms of the BSD 3-Clause License.                 *
@@ -7,8 +7,8 @@
 * The full license is in the file LICENSE, distributed with this software. *
 ****************************************************************************/
 
-#ifndef XEUS_SOCI_HANDLER_HPP
-#define XEUS_SOCI_HANDLER_HPP
+#ifndef XEUS_SQL_HANDLER_HPP
+#define XEUS_SQL_HANDLER_HPP
 
 #include <vector>
 #include <string>
@@ -18,11 +18,11 @@
 #include "xeus/xinterpreter.hpp"
 #include "xvega-bindings/xvega_bindings.hpp"
 
-#include "xeus_soci_interpreter.hpp"
+#include "xeus_sql_interpreter.hpp"
 
 namespace nl = nlohmann;
 
-namespace xeus_soci
+namespace xeus_sql
 {
     static std::unique_ptr<soci::session> load_db(const std::vector<std::string> tokenized_input)
     {
@@ -43,7 +43,7 @@ namespace xeus_soci
     }
 
     static std::pair<std::vector<std::string>, std::vector<std::string>> 
-        split_xv_soci_input(std::vector<std::string> complete_input)
+        split_xv_sql_input(std::vector<std::string> complete_input)
     {
         //TODO: test edge cases
         auto found = std::find(complete_input.begin(),
@@ -51,9 +51,9 @@ namespace xeus_soci
                                "<>");
 
         std::vector<std::string> xvega_input(complete_input.begin(), found);
-        std::vector<std::string> soci_input(found + 1, complete_input.end());
+        std::vector<std::string> sql_input(found + 1, complete_input.end());
 
-        return std::make_pair(xvega_input, soci_input);
+        return std::make_pair(xvega_input, sql_input);
     }
 }
 

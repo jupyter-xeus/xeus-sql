@@ -1,5 +1,5 @@
 /***************************************************************************
-* Copyright (c) 2020, QuantStack and xeus-soci contributors                *
+* Copyright (c) 2020, QuantStack and xeus-sql contributors                *
 *                                                                          *
 *                                                                          *
 * Distributed under the terms of the BSD 3-Clause License.                 *
@@ -12,13 +12,13 @@
 
 #include "gtest/gtest.h"
 
-#include "xeus-soci/xeus_soci_interpreter.hpp"
+#include "xeus-sql/xeus_sql_interpreter.hpp"
 #include "xvega-bindings/utils.hpp"
 
-namespace xeus_soci
+namespace xeus_sql
 {
 
-TEST(xeus_soci_interpreter, tokenizer)
+TEST(xeus_sql_interpreter, tokenizer)
 {
     std::string code = "\%LOAD database.db";
     std::vector<std::string> tokenized_code;

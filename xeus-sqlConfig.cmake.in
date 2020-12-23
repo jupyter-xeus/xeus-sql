@@ -7,13 +7,13 @@
 # The full license is in the file LICENSE, distributed with this software. #
 ############################################################################
 
-# xeus-soci cmake module
+# xeus-sql cmake module
 # This module sets the following variables in your project::
 #
-#   xeus-soci_FOUND - true if xeus-soci found on the system
-#   xeus-soci_INCLUDE_DIRS - the directory containing xeus-soci headers
-#   xeus-soci_LIBRARY - the library for dynamic linking
-#   xeus-soci_STATIC_LIBRARY - the library for static linking
+#   xeus-sql_FOUND - true if xeus-sql found on the system
+#   xeus-sql_INCLUDE_DIRS - the directory containing xeus-sql headers
+#   xeus-sql_LIBRARY - the library for dynamic linking
+#   xeus-sql_STATIC_LIBRARY - the library for static linking
 
 @PACKAGE_INIT@
 
@@ -34,13 +34,13 @@ find_dependency(PostgreSQL)
 find_dependency(Threads @Threads_REQUIRED_VERSION@)
 find_dependency(tabulate @tabulate_REQUIRED_VERSION@)
 
-if (NOT TARGET xeus-soci)
+if (NOT TARGET xeus-sql)
     include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Targets.cmake")
 
-    get_target_property(@PROJECT_NAME@_INCLUDE_DIR xeus-soci INTERFACE_INCLUDE_DIRECTORIES)
-    get_target_property(@PROJECT_NAME@_LIBRARY xeus-soci LOCATION)
+    get_target_property(@PROJECT_NAME@_INCLUDE_DIR xeus-sql INTERFACE_INCLUDE_DIRECTORIES)
+    get_target_property(@PROJECT_NAME@_LIBRARY xeus-sql LOCATION)
 
-    if (TARGET xeus-soci-static)
-        get_target_property(@PROJECT_NAME@_STATIC_LIBRARY xeus-soci-static LOCATION)
+    if (TARGET xeus-sql-static)
+        get_target_property(@PROJECT_NAME@_STATIC_LIBRARY xeus-sql-static LOCATION)
     endif ()
 endif ()

@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.1)
 
 if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
-    project(xeus_soci-test)
+    project(xeus_sql-test)
 
     find_package(xeus REQUIRED CONFIG)
-    set(XEUS_SOCI_INCLUDE_DIR ${XEUS_SOCI_INCLUDE_DIRS})
+    set(XEUS_SQL_INCLUDE_DIR ${XEUS_SQL_INCLUDE_DIRS})
 endif ()
 
 if(NOT CMAKE_BUILD_TYPE)
@@ -35,8 +35,8 @@ if(CMAKE_CXX_COMPILER_ID MATCHES MSVC)
 endif()
 
 
-if(XSOCI_DOWNLOAD_GTEST OR GTEST_SRC_DIR)
-    if(XSOCI_DOWNLOAD_GTEST)
+if(XSQL_DOWNLOAD_GTEST OR GTEST_SRC_DIR)
+    if(XSQL_DOWNLOAD_GTEST)
         # Download and unpack googletest at configure time
         configure_file(downloadGTest.cmake.in googletest-download/CMakeLists.txt)
     else()
@@ -76,42 +76,42 @@ set(COMMON_BASE
     main.cpp
 )
 
-set(XEUS_SOCI_TESTS
+set(XEUS_SQL_TESTS
     test_db.cpp
 )
 
-add_executable(test_xeus_soci  ${XEUS_SOCI_TESTS})
+add_executable(test_xeus_sql  ${XEUS_SQL_TESTS})
 
-if(XSOCI_DOWNLOAD_GTEST OR GTEST_SRC_DIR)
-    add_dependencies(test_xeus_soci gtest_main)
+if(XSQL_DOWNLOAD_GTEST OR GTEST_SRC_DIR)
+    add_dependencies(test_xeus_sql gtest_main)
 endif()
 
 if (APPLE)
-    set_target_properties(test_xeus_soci PROPERTIES
+    set_target_properties(test_xeus_sql PROPERTIES
         MACOSX_RPATH ON
     )
 else()
-    set_target_properties(test_xeus_soci PROPERTIES
+    set_target_properties(test_xeus_sql PROPERTIES
         BUILD_WITH_INSTALL_RPATH 1
         SKIP_BUILD_RPATH FALSE
     )
 endif()
 
-set_target_properties(test_xeus_soci PROPERTIES
+set_target_properties(test_xeus_sql PROPERTIES
     INSTALL_RPATH_USE_LINK_PATH TRUE
 )
 
-if (XSOCI_BUILD_SHARED)
-    set(XSOCI_TEST_LINK_TARGET xeus-soci)
+if (XSQL_BUILD_SHARED)
+    set(XSQL_TEST_LINK_TARGET xeus-sql)
 else()
-    set(XSOCI_TEST_LINK_TARGET xeus-soci-static)
+    set(XSQL_TEST_LINK_TARGET xeus-sql-static)
 endif()
-include_directories(${XSOCI_INCLUDE_DIRS})
-target_link_libraries(test_xeus_soci PRIVATE ${XSOCI_TEST_LINK_TARGET} xeus ${GTEST_BOTH_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
-target_compile_definitions(test_xeus_soci PRIVATE XEUS_SOCI_HOME="${XSOCI_PREFIX}")
-target_include_directories(test_xeus_soci PRIVATE ${XEUS_SOCI_INCLUDE_DIR})
+include_directories(${XSQL_INCLUDE_DIRS})
+target_link_libraries(test_xeus_sql PRIVATE ${XSQL_TEST_LINK_TARGET} xeus ${GTEST_BOTH_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+target_compile_definitions(test_xeus_sql PRIVATE XEUS_SQL_HOME="${XSQL_PREFIX}")
+target_include_directories(test_xeus_sql PRIVATE ${XEUS_SQL_INCLUDE_DIR})
 
 add_custom_target(
     xtest
-    COMMAND test_xeus_soci
-    DEPENDS test_xeus_soci)
+    COMMAND test_xeus_sql
+    DEPENDS test_xeus_sql)

@@ -13,7 +13,7 @@
 #include "xeus/xkernel.hpp"
 #include "xeus/xkernel_configuration.hpp"
 
-#include "xeus-soci/xeus_soci_interpreter.hpp"
+#include "xeus-sql/xeus_sql_interpreter.hpp"
 
 std::string extract_filename(int& argc, char* argv[])
 {
@@ -40,8 +40,8 @@ int main(int argc, char* argv[])
     std::string file_name = extract_filename(argc, argv);
 
     // Create interpreter instance
-    using interpreter_ptr = std::unique_ptr<xeus_soci::interpreter>;
-    interpreter_ptr interpreter = std::make_unique<xeus_soci::interpreter>();
+    using interpreter_ptr = std::unique_ptr<xeus_sql::interpreter>;
+    interpreter_ptr interpreter = std::make_unique<xeus_sql::interpreter>();
 
     // Create kernel instance and start it
     // xeus::xkernel kernel(config, xeus::get_user_name(), std::move(interpreter));
@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
                              xeus::make_xserver_shell_main);
 
         std::clog <<
-            "Starting xeus-soci kernel...\n\n"
+            "Starting xeus-sql kernel...\n\n"
             "If you want to connect to this kernel from an other client, you can use"
             " the " + file_name + " file."
             << std::endl;
@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
 
         const auto& config = kernel.get_config();
         std::clog <<
-            "Starting xeus-soci kernel...\n\n"
+            "Starting xeus-sql kernel...\n\n"
             "If you want to connect to this kernel from an other client, just copy"
             " and paste the following content inside of a `kernel.json` file. And then run for example:\n\n"
             "# jupyter console --existing kernel.json\n\n"

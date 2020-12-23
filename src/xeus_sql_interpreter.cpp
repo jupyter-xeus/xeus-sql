@@ -1,5 +1,5 @@
 /***************************************************************************
-* Copyright (c) 2020, QuantStack and xeus-soci contributors                *
+* Copyright (c) 2020, QuantStack and xeus-sql contributors                *
 *                                                                          *
 *                                                                          *
 * Distributed under the terms of the BSD 3-Clause License.                 *
@@ -21,11 +21,11 @@
 #include "tabulate/table.hpp"
 #include "xeus/xinterpreter.hpp"
 
-#include "xeus-soci/xeus_soci_interpreter.hpp"
+#include "xeus-sql/xeus_sql_interpreter.hpp"
 
-#include "xeus-soci/soci_handler.hpp"
+#include "xeus-sql/soci_handler.hpp"
 
-namespace xeus_soci
+namespace xeus_sql
 {
 
     void interpreter::configure_impl()
@@ -34,7 +34,7 @@ namespace xeus_soci
 
     nl::json interpreter::process_SQL_input(int execution_counter,
                                         const std::string& code,
-                                        xv::df_type& xv_soci_df)
+                                        xv::df_type& xv_sql_df)
     {
         nl::json pub_data;
         std::vector<std::string> plain_table_header;
@@ -53,7 +53,7 @@ namespace xeus_soci
         {
             std::string name = first_row.get_properties(i).get_name();
             html_table << "<th>" << name << "</th>\n";
-            xv_soci_df[name] = { "name" };
+            xv_sql_df[name] = { "name" };
             plain_table_header.push_back(name);
         }
         html_table << "</tr>\n";
@@ -94,7 +94,7 @@ namespace xeus_soci
                 }
                 html_table << "<td>" << cell << "</td>\n";
                 plain_table_row.push_back(cell);
-                xv_soci_df[r.get_properties(i).get_name()].push_back(cell);
+                xv_sql_df[r.get_properties(i).get_name()].push_back(cell);
             }
                 html_table << "</tr>\n";
         }
@@ -125,7 +125,7 @@ namespace xeus_soci
         std::string sanitized_code = xv_bindings::sanitize_string(code);
         std::vector<std::string> tokenized_input = xv_bindings::tokenizer(sanitized_code);
 
-        xv::df_type xv_soci_df;
+        xv::df_type xv_sql_df;
         try
         {
             /* Runs magic */
@@ -143,16 +143,16 @@ namespace xeus_soci
                     nl::json chart;
                     std::vector<std::string> xvega_input, sql_input;
 
-                    std::tie(xvega_input, sql_input) = split_xv_soci_input(tokenized_input);
-                    std::stringstream stringfied_soci_input;
+                    std::tie(xvega_input, sql_input) = split_xv_sql_input(tokenized_input);
+                    std::stringstream stringfied_sql_input;
                     for (size_t i = 0; i < sql_input.size(); i++) {
-                        stringfied_soci_input << " " << sql_input[i];
+                        stringfied_sql_input << " " << sql_input[i];
                     }
 
-                    process_SQL_input(execution_counter, stringfied_soci_input.str(), xv_soci_df);
+                    process_SQL_input(execution_counter, stringfied_sql_input.str(), xv_sql_df);
 
                     chart = xv_bindings::process_xvega_input(xvega_input,
-                                                             xv_soci_df);
+                                                             xv_sql_df);
 
                     publish_execution_result(execution_counter,
                                              std::move(chart),
@@ -176,7 +176,7 @@ namespace xeus_soci
                     /* Shows rich output for tables */
                     if (xv_bindings::case_insentive_equals("SELECT", tokenized_input[0]))
                     {
-                        nl::json data = process_SQL_input(execution_counter, code, xv_soci_df);
+                        nl::json data = process_SQL_input(execution_counter, code, xv_sql_df);
 
                         publish_execution_result(execution_counter,
                                                  std::move(data),
@@ -242,34 +242,40 @@ namespace xeus_soci
     nl::json interpreter::kernel_info_request_impl()
     {
         nl::json result;
-        result["implementation"] = "xsoci";
-        result["implementation_version"] = XSOCI_VERSION;
+        result["implementation"] = "xsql";
+        result["implementation_version"] = XSQL_VERSION;
 
-        /* The jupyter-console banner for xeus-soci is the following:
-                                                                                              _|
-            _|    _|    _|_|    _|    _|    _|_|_|                _|_|_|    _|_|      _|_|_|    
-              _|_|    _|_|_|_|  _|    _|  _|_|      _|_|_|_|_|  _|_|      _|    _|  _|        _|
-            _|    _|  _|        _|    _|      _|_|                  _|_|  _|    _|  _|        _|
-            _|    _|    _|_|_|    _|_|_|  _|_|_|                _|_|_|      _|_|      _|_|_|  _|
-           xeus-soci: a Jupyter kernel for SOCI
+        /* The jupyter-console banner for xeus-sql is the following:
+                                            _ 
+                                           | |
+            __  _____ _   _ ___   ___  __ _| |
+            \ \/ / _ \ | | / __| / __|/ _` | |
+             >  <  __/ |_| \__ \ \__ \ (_| | |
+            /_/\_\___|\__,_|___/ |___/\__, |_|
+                                         | |  
+                                         |_| 
+           xeus-sql: a Jupyter kernel for SOCI
            SOCI version: x.x.x
         */
 
         std::string banner = ""
-            "                                                                                  _|"
-            "_|    _|    _|_|    _|    _|    _|_|_|                _|_|_|    _|_|      _|_|_|    "
-            "  _|_|    _|_|_|_|  _|    _|  _|_|      _|_|_|_|_|  _|_|      _|    _|  _|        _|"
-            "_|    _|  _|        _|    _|      _|_|                  _|_|  _|    _|  _|        _|"
-            "_|    _|    _|_|_|    _|_|_|  _|_|_|                _|_|_|      _|_|      _|_|_|  _|"
-            "  xeus-soci: a Jupyter kernel for SOCI\n"
+            "                                _  "
+            "                               | | "
+            "__  _____ _   _ ___   ___  __ _| | "
+            "\\ \\/ / _ \\ | | / __| / __|/ _` | | "
+            " >  <  __/ |_| \\__ \\ \\__ \\ (_| | | "
+            "/_/\\_\\___|\\__,_|___/ |___/\\__, |_| "
+            "                             | |   "
+            "                             |_|  "
+            "  xeus-sql: a Jupyter kernel for SOCI\n"
             "  SOCI version: ";
-        banner.append(XSOCI_VERSION);
+        banner.append(XSQL_VERSION);
 
         result["banner"] = banner;
         //TODO: This should change with the language
         result["language_info"]["name"] = "mysql";
         result["language_info"]["codemirror_mode"] = "sql";
-        result["language_info"]["version"] = XSOCI_VERSION;
+        result["language_info"]["version"] = XSQL_VERSION;
         result["language_info"]["mimetype"] = "";
         result["language_info"]["file_extension"] = "";
         return result;

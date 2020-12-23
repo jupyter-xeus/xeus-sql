@@ -1,4 +1,4 @@
-PROJECT_NAME      = "xeus-soci"
+PROJECT_NAME      = "xeus-sql"
 XML_OUTPUT        = xml
 INPUT             = ../include
 GENERATE_LATEX    = NO

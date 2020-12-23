@@ -7,7 +7,7 @@
 Introduction
 ============
 
-``xeus-soci`` is a Jupyter kernel for general SQL implementations based on the native implementation of the Jupyter protocol xeus_ and SOCI_, a database access library for C++.
+``xeus-sql`` is a Jupyter kernel for general SQL implementations based on the native implementation of the Jupyter protocol xeus_ and SOCI_, a database access library for C++.
 
 Licensing
 =========

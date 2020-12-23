@@ -1,5 +1,5 @@
 /***************************************************************************
-* Copyright (c) 2020, QuantStack and xeus-soci contributors                *
+* Copyright (c) 2020, QuantStack and xeus-sql contributors                *
 *                                                                          *
 *                                                                          *
 * Distributed under the terms of the BSD 3-Clause License.                 *
@@ -7,23 +7,23 @@
 * The full license is in the file LICENSE, distributed with this software. *
 ****************************************************************************/
 
-#ifndef XEUS_SOCI_INTERPRETER_HPP
-#define XEUS_SOCI_INTERPRETER_HPP
+#ifndef XEUS_SQL_INTERPRETER_HPP
+#define XEUS_SQL_INTERPRETER_HPP
 
 #include "nlohmann/json.hpp"
 #include "xeus/xinterpreter.hpp"
 #include "soci/soci.h"
 #include "xvega-bindings/xvega_bindings.hpp"
 
-#include "xeus_soci_interpreter.hpp"
-#include "xeus_soci_config.hpp"
+#include "xeus_sql_interpreter.hpp"
+#include "xeus_sql_config.hpp"
 
 
 namespace nl = nlohmann;
 
-namespace xeus_soci
+namespace xeus_sql
 {
-    class XEUS_SOCI_API interpreter : public xeus::xinterpreter
+    class XEUS_SQL_API interpreter : public xeus::xinterpreter
     {
     public:
         interpreter() = default;

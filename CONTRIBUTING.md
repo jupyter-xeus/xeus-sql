@@ -1,6 +1,6 @@
-# Contributing to xeus-soci
+# Contributing to xeus-sql
 
-xeus and xeus-soci are subprojects of Project Jupyter and subject to the [Jupyter governance](https://github.com/jupyter/governance) and [Code of conduct](https://github.com/jupyter/governance/blob/master/conduct/code_of_conduct.md).
+xeus and xeus-sql are subprojects of Project Jupyter and subject to the [Jupyter governance](https://github.com/jupyter/governance) and [Code of conduct](https://github.com/jupyter/governance/blob/master/conduct/code_of_conduct.md).
 
 ## General Guidelines
 
@@ -14,10 +14,10 @@ The xeus team organizes public video meetings. The schedule for future meetings 
 
 ### Installing from source
 
-To install the xeus-soci dependencies:
+To install the xeus-sql dependencies:
 
 ```bash
-mamba install cmake nlohmann_json xtl cppzmq xeus mysql sqlite postgresql cpp-tabulate=1.3 xvega xvega-bindings xproperty jupyterlab -c conda-forge
+mamba install cmake nlohmann_json xtl cppzmq xeus mysql sqlite postgresql cpp-tabulate=1.3 xvega xvega-bindings xproperty jupyterlab soci -c conda-forge
 ```
 
 Then you can compile the sources
