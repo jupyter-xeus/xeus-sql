@@ -80,7 +80,7 @@ find_package(Threads REQUIRED)
 
 find_package(Soci REQUIRED MODULE)
 find_package(PostgreSQL)
-# find_package(mysql)
+find_package(mysql)
 find_package(SQLite3)
 
 # Target and link
