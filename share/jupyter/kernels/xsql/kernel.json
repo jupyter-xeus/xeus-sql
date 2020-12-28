@@ -1,9 +1,0 @@
-{
-    "display_name": "xsql",
-    "argv": [
-        "/home/mariana/miniconda3/envs/soci/bin/xsql",
-        "-f",
-        "{connection_file}"
-    ],
-    "language": "sqlite"
-}
