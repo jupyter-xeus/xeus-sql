@@ -135,7 +135,7 @@ macro(xsql_set_common_options target_name)
 
         # C++14 flag
         CHECK_CXX_COMPILER_FLAG("-std=c++14" HAS_CPP14_FLAG)
-        message(STATUS "HAS_CPP14_FLAG" HAS_CPP14_FLAG)
+        message(STATUS "HAS_CPP14_FLAG: " ${HAS_CPP14_FLAG})
         if (HAS_CPP14_FLAG)
             target_compile_features(${target_name} PRIVATE cxx_std_14)
         else ()
