@@ -221,7 +221,6 @@ macro(xsql_create_target target_name linkage output_name)
 
     target_link_libraries(${target_name} PUBLIC 
       ${XSQL_XEUS_TARGET}
-      xvega-bindings
       xvega
       ${SOCI_LIBRARY}
     )
