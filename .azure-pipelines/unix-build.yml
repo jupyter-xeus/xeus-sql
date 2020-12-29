@@ -27,7 +27,7 @@ steps:
 
   - script: |
       source activate xeus-sql
-      make install -j2
+      make install
     displayName: Build xeus-sql
     workingDirectory: $(Build.BinariesDirectory)/build
 
