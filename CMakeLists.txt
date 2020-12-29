@@ -72,8 +72,8 @@ set(xeus_REQUIRED_VERSION 0.23.10)
 set(xvega_bindings_REQUIRED_VERSION 0.0.3)
 
 find_package(xeus ${xeus_REQUIRED_VERSION} REQUIRED)
-find_package(xvega REQUIRED)
-find_package(xvega-bindings ${xvega_bindings_REQUIRED_VERSION} REQUIRED)
+find_package(xvega)
+find_package(xvega ${xvega_bindings_REQUIRED_VERSION} REQUIRED)
 
 find_package(tabulate REQUIRED)
 find_package(Threads REQUIRED)
@@ -133,12 +133,12 @@ macro(xsql_set_common_options target_name)
             target_compile_options(${target_name} PUBLIC -march=native)
         endif ()
 
-        # C++17 flag
-        CHECK_CXX_COMPILER_FLAG("-std=c++17" HAS_CPP17_FLAG)
-        if (HAS_CPP17_FLAG)
-            target_compile_features(${target_name} PRIVATE cxx_std_17)
+        # C++14 flag
+        CHECK_CXX_COMPILER_FLAG("-std=c++14" HAS_CPP14_FLAG)
+        if (HAS_CPP14_FLAG)
+            target_compile_features(${target_name} PRIVATE cxx_std_14)
         else ()
-            message(FATAL_ERROR "Unsupported compiler -- xeus-sql requires C++17 support!")
+            message(FATAL_ERROR "Unsupported compiler -- xeus-sql requires C++14 support!")
         endif ()
 
         # Enable link time optimization and set the default symbol
@@ -221,7 +221,6 @@ macro(xsql_create_target target_name linkage output_name)
 
     target_link_libraries(${target_name} PUBLIC 
       ${XSQL_XEUS_TARGET}
-      xvega-bindings
       xvega
       ${SOCI_LIBRARY}
     )

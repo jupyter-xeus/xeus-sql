@@ -19,21 +19,15 @@ steps:
       source activate xeus-sql
       mkdir build
       cd build
-      if [[ $(xsql_used_shared_xeus_sql) == '0' ]]; then
-        CMAKE_EXTRA_ARGS="$CMAKE_EXTRA_ARGS -DXSQL_BUILD_SHARED=OFF -DXSQL_USE_SHARED_XEUS_SQL=OFF";
-      fi
-      if [[ $(xsql_used_shared_xeus) == '0' ]]; then
-        CMAKE_EXTRA_ARGS="$CMAKE_EXTRA_ARGS -DXSQL_USE_SHARED_XEUS=OFF";
-      fi
-      # The xeus conda package is built with CMAKE_CXX_STANDARD=17
-      CMAKE_EXTRA_ARGS="$CMAKE_EXTRA_ARGS -DCMAKE_CXX_STANDARD=17";
+      # The xeus conda package is built with CMAKE_CXX_STANDARD=14
+      CMAKE_EXTRA_ARGS="$CMAKE_EXTRA_ARGS -DCMAKE_CXX_STANDARD=14";
       cmake -D CMAKE_PREFIX_PATH=$CONDA_PREFIX -D CMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DXSQL_DOWNLOAD_GTEST=ON -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX ${CMAKE_EXTRA_ARGS} $(Build.SourcesDirectory)
     displayName: Configure xeus-sql
     workingDirectory: $(Build.BinariesDirectory)
 
   - script: |
       source activate xeus-sql
-      make install -j2
+      make install
     displayName: Build xeus-sql
     workingDirectory: $(Build.BinariesDirectory)/build
 

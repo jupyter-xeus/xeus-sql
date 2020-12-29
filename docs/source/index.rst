@@ -20,26 +20,27 @@ This software is licensed under the BSD-3-Clause license. See the LICENSE file f
 
 .. toctree::
    :caption: Getting started
-   :maxdepth: 4
+   :maxdepth: 1
 
    installation
 
 .. toctree::
-   :caption: Connecting to different databases
-   :maxdepth: 4
+   :caption: Connecting to databases
+   :maxdepth: 1
 
-    DB2
-    Firebird
-    MySQL
-    ODBC
-    Oracle
-    PostgreSQL
-    SQLite3
+   DB2
+   Firebird
+   MySQL
+   ODBC
+   Oracle
+   PostgreSQL
+   SQLite3
 
 .. toctree::
    :caption: API
-   :maxdepth: 4
+   :maxdepth: 1
 
+   api
    sql_magic
    xvega_magic
 

@@ -46,9 +46,9 @@ namespace xeus_sql
         nl::json kernel_info_request_impl() override;
         void shutdown_request_impl() override;
 
-        nl::json process_SQL_input(int execution_counter,
-                                   const std::string& code,
+        nl::json process_SQL_input(const std::string& code,
                                    xv::df_type& xv_sqlite_df);
+
         std::unique_ptr<soci::session> sql;
     };
 }

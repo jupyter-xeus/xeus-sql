@@ -17,12 +17,10 @@
 #include <vector>
 #include <tuple>
 
-
 #include "tabulate/table.hpp"
 #include "xeus/xinterpreter.hpp"
 
 #include "xeus-sql/xeus_sql_interpreter.hpp"
-
 #include "xeus-sql/soci_handler.hpp"
 
 namespace xeus_sql
@@ -32,9 +30,8 @@ namespace xeus_sql
     {
     }
 
-    nl::json interpreter::process_SQL_input(int execution_counter,
-                                        const std::string& code,
-                                        xv::df_type& xv_sql_df)
+    nl::json interpreter::process_SQL_input(const std::string& code,
+                                            xv::df_type& xv_sql_df)
     {
         nl::json pub_data;
         std::vector<std::string> plain_table_header;
@@ -104,15 +101,7 @@ namespace xeus_sql
         pub_data["text/html"] = html_table.str();
 
         return pub_data;
-
-        // publish_execution_result(execution_counter,
-        //                         std::move(pub_data),
-        //                         nl::json::object());
         }
-    //     else
-    //     {
-    //         query.exec();
-    //     }
 
     nl::json interpreter::execute_request_impl(int execution_counter,
                                                const std::string& code,
@@ -149,7 +138,7 @@ namespace xeus_sql
                         stringfied_sql_input << " " << sql_input[i];
                     }
 
-                    process_SQL_input(execution_counter, stringfied_sql_input.str(), xv_sql_df);
+                    process_SQL_input(stringfied_sql_input.str(), xv_sql_df);
 
                     chart = xv_bindings::process_xvega_input(xvega_input,
                                                              xv_sql_df);
@@ -176,7 +165,7 @@ namespace xeus_sql
                     /* Shows rich output for tables */
                     if (xv_bindings::case_insentive_equals("SELECT", tokenized_input[0]))
                     {
-                        nl::json data = process_SQL_input(execution_counter, code, xv_sql_df);
+                        nl::json data = process_SQL_input(code, xv_sql_df);
 
                         publish_execution_result(execution_counter,
                                                  std::move(data),

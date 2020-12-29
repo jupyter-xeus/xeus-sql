@@ -1,5 +1,5 @@
 # xeus-sql
-[![Azure Pipelines](https://dev.azure.com/jupyter-xeus/jupyter-xeus/_apis/build/status/jupyter-xeus.xeus-sql?branchName=master)](https://dev.azure.com/jupyter-xeus/jupyter-xeus/_build/latest?definitionId=5&branchName=master)
+[![Build Status](https://dev.azure.com/jupyter-xeus/jupyter-xeus/_apis/build/status/jupyter-xeus.xeus-sql?branchName=master)](https://dev.azure.com/jupyter-xeus/jupyter-xeus/_build/latest?definitionId=9&branchName=master)
 [![Documentation Status](https://readthedocs.org/projects/xeus-sql/badge/?version=latest)](https://xeus-sql.readthedocs.io/en/latest/?badge=latest)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jupyter-xeus/xeus-sql/master?filepath=examples/SQLite.ipynb)
 
@@ -11,11 +11,11 @@ Launch the Jupyter notebook with `jupyter notebook` or Jupyter lab with `jupyter
 
 Note that `xeus-sql` support the following SQL implementations:
 
-* DB2 _(Needs help with documentation)_
-* Firebird _(Needs help with documentation)_
+* DB2
+* Firebird
 * MySQL
-* ODBC (generic backend) _(Needs help with documentation)_
-* Oracle _(Needs help with documentation)_
+* ODBC (generic backend)
+* Oracle
 * PostgreSQL
 * SQLite3
 
