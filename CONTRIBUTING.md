@@ -35,7 +35,3 @@ make install
 ```
 mamba install sphinx breathe doxygen sphinx_rtd_theme
 ```
-
-#### Tips on subprojects:
-
-To build SOCI from source using a mamba environment: `cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -G "Unix Makefiles" -DWITH_BOOST=OFF -DSOCI_CXX11=ON -DCMAKE_BUILD_TYPE=Release ..`
