@@ -1,1 +1,8 @@
+# Build directory
 build/
+
+# generated kernel specs
+share/jupyter/kernels/xsql/kernel.json
+
+# Jupyter artefacts
+.ipynb_checkpoints/
