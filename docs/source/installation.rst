@@ -56,16 +56,16 @@ Conda forge offers packaged versions for MySQL, PostgreSQL and SQLite and you ca
 From Source
 -----------
 
-You can install ```xeus-sql``` from source with cmake. This requires that you have all the dependencies installed in the same prefix.
+You can install ``xeus-sql`` from source with ``cmake``. This requires that you have all the dependencies installed in the same prefix.
 
 
 .. code::
 
-    conda install cmake nlohmann_json xtl cppzmq xeus mysql sqlite postgresql cpp-tabulate=1.3 xvega xvega-bindings xproperty jupyterlab -c conda-forge
+    conda install cmake nlohmann_json xtl cppzmq xeus mysql sqlite postgresql cpp-tabulate=1.3 xvega xvega-bindings xproperty jupyterlab compilers -c conda-forge
 
 .. code::
 
-    mamba install cmake nlohmann_json xtl cppzmq xeus mysql sqlite postgresql cpp-tabulate=1.3 xvega xvega-bindings xproperty jupyterlab -c conda-forge
+    mamba install cmake nlohmann_json xtl cppzmq xeus mysql sqlite postgresql cpp-tabulate=1.3 xvega xvega-bindings xproperty jupyterlab compilers -c conda-forge
 
 .. code::
 
