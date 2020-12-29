@@ -5,14 +5,13 @@ dependencies:
   # Builde dependencies
   - cmake
   # host dependencies
+  - xeus
+  - cppzmq
+  - zeromq
   - nlohmann_json
   - xtl
-  - cppzmq
-  - xeus
-  - sqlite
-  - mysql
-  - postgresql
-  - soci
-  - cpp-tabulate=1.3
-  - xvega
+  - cpp-tabulate
+  - soci-core
   - xproperty
+  - xvega-bindings
+  - xvega
