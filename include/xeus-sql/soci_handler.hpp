@@ -24,12 +24,16 @@ namespace nl = nlohmann;
 
 namespace xeus_sql
 {
-    static std::unique_ptr<soci::session> load_db(const std::vector<std::string> tokenized_input)
+    static std::unique_ptr<soci::session> load_db(
+            const std::vector<std::string> tokenized_input)
     {
-        std::string path = "dbname=" + tokenized_input[2];
-        std::string db = tokenized_input[1];
-
-        return std::make_unique<soci::session>(db, path);
+        std::string aux;
+        for (int i = 2; i < tokenized_input.size(); i++)
+        {
+            aux += tokenized_input[i] + ' ';
+        }
+        return std::make_unique<soci::session>(
+                xv_bindings::to_lower(tokenized_input[1]), aux);
     }
 
     static std::unique_ptr<soci::session> parse_SQL_magic(
