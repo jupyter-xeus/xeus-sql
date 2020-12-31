@@ -116,7 +116,9 @@ set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/${C
 # E.g. without this option libpq fails to be loaded by libsoci_postgresql, which is loaded
 # by libsoci_core, which is loaded by us.
 # source: https://github.com/chenxiaolong/DualBootPatcher/pull/548
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--disable-new-dtags")
+if (UNIX AND NOT APPLE)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --disable-new-dtags")
+endif()
 
 macro(xsql_set_common_options target_name)
     if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR
@@ -133,12 +135,16 @@ macro(xsql_set_common_options target_name)
             target_compile_options(${target_name} PUBLIC -march=native)
         endif ()
 
-        # C++14 flag
-        CHECK_CXX_COMPILER_FLAG("-std=c++14" HAS_CPP14_FLAG)
-        if (HAS_CPP14_FLAG)
+        # C++14 flag, setting this flag is failing on Clang
+        if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+            CHECK_CXX_COMPILER_FLAG("-std=c++14" HAS_CPP14_FLAG)
+            if (HAS_CPP14_FLAG)
             target_compile_features(${target_name} PRIVATE cxx_std_14)
+            else ()
+                message(FATAL_ERROR "Unsupported compiler -- xeus-sql requires C++14 support!")
+            endif ()
         else ()
-            message(FATAL_ERROR "Unsupported compiler -- xeus-sql requires C++14 support!")
+            target_compile_features(${target_name} PRIVATE cxx_std_14)
         endif ()
 
         # Enable link time optimization and set the default symbol

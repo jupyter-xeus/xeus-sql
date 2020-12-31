@@ -28,7 +28,7 @@ namespace xeus_sql
             const std::vector<std::string> tokenized_input)
     {
         std::string aux;
-        for (int i = 2; i < tokenized_input.size(); i++)
+        for (std::size_t i = 2; i < tokenized_input.size(); i++)
         {
             aux += tokenized_input[i] + ' ';
         }
