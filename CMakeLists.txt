@@ -135,14 +135,17 @@ macro(xsql_set_common_options target_name)
             target_compile_options(${target_name} PUBLIC -march=native)
         endif ()
 
-        # C++14 flag
-        # CHECK_CXX_COMPILER_FLAG("-std=c++14" HAS_CPP14_FLAG)
-        # message(STATUS "HAS_CPP14_FLAG: " ${HAS_CPP14_FLAG})
-        # if (HAS_CPP14_FLAG)
-        target_compile_features(${target_name} PRIVATE cxx_std_14)
-        # else ()
-        #     message(FATAL_ERROR "Unsupported compiler -- xeus-sql requires C++14 support!")
-        # endif ()
+        # C++14 flag, setting this flag is failing on Clang
+        if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+            CHECK_CXX_COMPILER_FLAG("-std=c++14" HAS_CPP14_FLAG)
+            if (HAS_CPP14_FLAG)
+            target_compile_features(${target_name} PRIVATE cxx_std_14)
+            else ()
+                message(FATAL_ERROR "Unsupported compiler -- xeus-sql requires C++14 support!")
+            endif ()
+        else ()
+            target_compile_features(${target_name} PRIVATE cxx_std_14)
+        endif ()
 
         # Enable link time optimization and set the default symbol
         # visibility to hidden (very important to obtain small binaries)
