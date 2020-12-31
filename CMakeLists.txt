@@ -116,9 +116,8 @@ set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/${C
 # E.g. without this option libpq fails to be loaded by libsoci_postgresql, which is loaded
 # by libsoci_core, which is loaded by us.
 # source: https://github.com/chenxiaolong/DualBootPatcher/pull/548
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl")
 if (UNIX AND NOT APPLE)
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--disable-new-dtags")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --disable-new-dtags")
 endif()
 
 macro(xsql_set_common_options target_name)
