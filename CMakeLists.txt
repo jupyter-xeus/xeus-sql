@@ -121,7 +121,7 @@ set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/${C
 if (NOT CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     message(STATUS "🔮")
     message(STATUS CMAKE_CXX_COMPILER_ID)
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --disable-new-dtags")
+    # set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --disable-new-dtags")
 endif()
 
 macro(xsql_set_common_options target_name)
