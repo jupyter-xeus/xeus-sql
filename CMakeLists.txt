@@ -119,6 +119,8 @@ set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/${C
 # by libsoci_core, which is loaded by us.
 # source: https://github.com/chenxiaolong/DualBootPatcher/pull/548
 if (NOT CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    message(STATUS "🔮")
+    message(STATUS CMAKE_CXX_COMPILER_ID)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --disable-new-dtags")
 endif()
 
