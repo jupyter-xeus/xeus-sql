@@ -73,11 +73,9 @@ OPTION(gtest_disable_pthreads "Disable uses of pthreads in gtest." ON)
 
 # Be sure to use recent versions
 set(xeus_REQUIRED_VERSION 0.23.10)
-set(xvega_bindings_REQUIRED_VERSION 0.0.3)
 
 find_package(xeus ${xeus_REQUIRED_VERSION} REQUIRED)
 find_package(xvega)
-find_package(xvega ${xvega_bindings_REQUIRED_VERSION} REQUIRED)
 
 find_package(tabulate REQUIRED)
 find_package(Threads REQUIRED)
@@ -120,7 +118,7 @@ set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/${C
 # E.g. without this option libpq fails to be loaded by libsoci_postgresql, which is loaded
 # by libsoci_core, which is loaded by us.
 # source: https://github.com/chenxiaolong/DualBootPatcher/pull/548
-if (UNIX AND NOT APPLE)
+if (NOT CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --disable-new-dtags")
 endif()
 
@@ -149,6 +147,32 @@ macro(xsql_set_common_options target_name)
             endif ()
         else ()
             target_compile_features(${target_name} PRIVATE cxx_std_14)
+        endif ()
+
+        # Enable link time optimization and set the default symbol
+        # visibility to hidden (very important to obtain small binaries)
+        if (NOT ${U_CMAKE_BUILD_TYPE} MATCHES DEBUG)
+            # Check for Link Time Optimization support
+            # (GCC/Clang)
+            CHECK_CXX_COMPILER_FLAG("-flto" HAS_LTO_FLAG)
+            if (HAS_LTO_FLAG)
+                target_compile_options(${target_name} PUBLIC -flto)
+            endif ()
+
+            # Avoids removing symbols from the static library
+            CHECK_CXX_COMPILER_FLAG("-ffat-lto-objects" HAS_FATLTO_FLAG)
+            if (${linkage_upper} MATCHES "STATIC" AND  HAS_FATLTO_FLAG)
+                message(STATUS "ENABLE FAT LTO OBJECTS")
+                target_compile_options(${target_name} PUBLIC -ffat-lto-objects)
+            endif ()
+
+            # Intel equivalent to LTO is called IPO
+            if (CMAKE_CXX_COMPILER_ID MATCHES "Intel")
+                CHECK_CXX_COMPILER_FLAG("-ipo" HAS_IPO_FLAG)
+                if (HAS_IPO_FLAG)
+                    target_compile_options(${target_name} PUBLIC -ipo)
+                endif ()
+            endif ()
         endif ()
     endif ()
 
