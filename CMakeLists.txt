@@ -88,6 +88,8 @@ find_package(SQLite3)
 # Target and link
 # ===============
 
+string(TOUPPER "${CMAKE_BUILD_TYPE}" U_CMAKE_BUILD_TYPE)
+
 # xeus-sql source directory
 set(XEUS_SQL_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
@@ -119,9 +121,7 @@ set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/${C
 # by libsoci_core, which is loaded by us.
 # source: https://github.com/chenxiaolong/DualBootPatcher/pull/548
 if (NOT CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    message(STATUS "🔮")
-    message(STATUS CMAKE_CXX_COMPILER_ID)
-    # set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --disable-new-dtags")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --disable-new-dtags")
 endif()
 
 macro(xsql_set_common_options target_name)
