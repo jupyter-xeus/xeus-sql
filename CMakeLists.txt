@@ -64,16 +64,18 @@ OPTION(XSQL_USE_SHARED_XEUS_SQL "Link xsql with the xeus-sql shared library (ins
 OPTION(XSQL_DOWNLOAD_GTEST "build gtest from downloaded sources" OFF)
 OPTION(XSQL_BUILD_TESTS "xeus-sql test suite" OFF)
 
+OPTION(CMAKE_USE_WIN32_THREADS_INIT "using WIN32 threads" ON)
+OPTION(gtest_disable_pthreads "Disable uses of pthreads in gtest." ON)
+
+
 # Dependencies
 # ============
 
 # Be sure to use recent versions
 set(xeus_REQUIRED_VERSION 0.23.10)
-set(xvega_bindings_REQUIRED_VERSION 0.0.3)
 
 find_package(xeus ${xeus_REQUIRED_VERSION} REQUIRED)
 find_package(xvega)
-find_package(xvega ${xvega_bindings_REQUIRED_VERSION} REQUIRED)
 
 find_package(tabulate REQUIRED)
 find_package(Threads REQUIRED)
@@ -85,6 +87,8 @@ find_package(SQLite3)
 
 # Target and link
 # ===============
+
+string(TOUPPER "${CMAKE_BUILD_TYPE}" U_CMAKE_BUILD_TYPE)
 
 # xeus-sql source directory
 set(XEUS_SQL_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
@@ -111,14 +115,6 @@ set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
 string(TOUPPER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 
 set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
-
-# Transitive dependencies are not being picked up by xeus-sql.
-# E.g. without this option libpq fails to be loaded by libsoci_postgresql, which is loaded
-# by libsoci_core, which is loaded by us.
-# source: https://github.com/chenxiaolong/DualBootPatcher/pull/548
-if (UNIX AND NOT APPLE)
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --disable-new-dtags")
-endif()
 
 macro(xsql_set_common_options target_name)
     if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR
@@ -172,7 +168,6 @@ macro(xsql_set_common_options target_name)
                 endif ()
             endif ()
         endif ()
-
     endif ()
 
     if (APPLE)
