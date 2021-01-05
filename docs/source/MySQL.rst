@@ -49,6 +49,6 @@ You will also need to create a new user and grant access to it to the newly crea
 
 Note that it might be necessary to install MySQL from different sources other than conda if you intend to manipulate users and creation of databases.
 
-More information about Firebird can be found in the SOCI documentation_.
+More information about MySQL can be found in the SOCI documentation_.
 
 .. _documentation: http://soci.sourceforge.net/doc/release/4.0/backends/mysql/
