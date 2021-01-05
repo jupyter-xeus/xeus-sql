@@ -116,14 +116,6 @@ string(TOUPPER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 
 set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 
-# Transitive dependencies are not being picked up by xeus-sql.
-# E.g. without this option libpq fails to be loaded by libsoci_postgresql, which is loaded
-# by libsoci_core, which is loaded by us.
-# source: https://github.com/chenxiaolong/DualBootPatcher/pull/548
-if (NOT CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --disable-new-dtags")
-endif()
-
 macro(xsql_set_common_options target_name)
     if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR
         CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR
