@@ -10,7 +10,7 @@ jobs:
           xsql_use_shared_xeus_sql: 0
     pool:
       vmImage: ubuntu-16.04
-    timeoutInMinutes: 360
+    timeoutInMinutes: 30
     steps:
           
       - bash: echo "##vso[task.prependpath]$CONDA/bin"
