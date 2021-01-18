@@ -13,14 +13,6 @@ project(xeus-sql)
 set(XEUS_SQL_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(XEUS_TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test)
 
-set(CMAKE_FIND_ROOT_PATH ${CMAKE_PREFIX_PATH})
-set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
-set(CMAKE_FIND_FRAMEWORK NEVER)
-set(CMAKE_FIND_APPBUNDLE NEVER)
-set(CMAKE_PROGRAM_PATH ${CMAKE_PREFIX_PATH})
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # Versioning
@@ -143,31 +135,6 @@ macro(xsql_set_common_options target_name)
             target_compile_features(${target_name} PRIVATE cxx_std_14)
         endif ()
 
-        # Enable link time optimization and set the default symbol
-        # visibility to hidden (very important to obtain small binaries)
-        if (NOT ${U_CMAKE_BUILD_TYPE} MATCHES DEBUG)
-            # Check for Link Time Optimization support
-            # (GCC/Clang)
-            CHECK_CXX_COMPILER_FLAG("-flto" HAS_LTO_FLAG)
-            if (HAS_LTO_FLAG)
-                target_compile_options(${target_name} PUBLIC -flto)
-            endif ()
-
-            # Avoids removing symbols from the static library
-            CHECK_CXX_COMPILER_FLAG("-ffat-lto-objects" HAS_FATLTO_FLAG)
-            if (${linkage_upper} MATCHES "STATIC" AND  HAS_FATLTO_FLAG)
-                message(STATUS "ENABLE FAT LTO OBJECTS")
-                target_compile_options(${target_name} PUBLIC -ffat-lto-objects)
-            endif ()
-
-            # Intel equivalent to LTO is called IPO
-            if (CMAKE_CXX_COMPILER_ID MATCHES "Intel")
-                CHECK_CXX_COMPILER_FLAG("-ipo" HAS_IPO_FLAG)
-                if (HAS_IPO_FLAG)
-                    target_compile_options(${target_name} PUBLIC -ipo)
-                endif ()
-            endif ()
-        endif ()
     endif ()
 
     if (APPLE)
