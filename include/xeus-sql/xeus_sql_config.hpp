@@ -7,8 +7,8 @@
 * The full license is in the file LICENSE, distributed with this software. *
 ****************************************************************************/
 
-#ifndef XSQL_CONFIG_HPP
-#define XSQL_CONFIG_HPP
+#ifndef XEUS_SQL_CONFIG_HPP
+#define XEUS_SQL_CONFIG_HPP
 
 // Project version
 #define XSQL_VERSION_MAJOR 0
