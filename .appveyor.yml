@@ -1,0 +1,40 @@
+build: false
+
+platform:
+  - x64
+
+image:
+  - Visual Studio 2017
+  - Visual Studio 2015
+
+environment:
+  matrix:
+    - MINICONDA: C:\\xeus-conda
+
+init:
+  - "ECHO %MINICONDA%"
+  - if "%APPVEYOR_BUILD_WORKER_IMAGE%" == "Visual Studio 2015" set VCVARPATH="C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"
+  - if "%APPVEYOR_BUILD_WORKER_IMAGE%" == "Visual Studio 2015" set VCARGUMENT=%PLATFORM%
+  - if "%APPVEYOR_BUILD_WORKER_IMAGE%" == "Visual Studio 2017" set VCVARPATH="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
+  - echo "%VCVARPATH% %VCARGUMENT%"
+  - "%VCVARPATH% %VCARGUMENT%"
+  - ps: Start-FileDownload 'http://repo.continuum.io/miniconda/Miniconda3-latest-Windows-x86_64.exe' C:\Miniconda.exe
+  - cmd: C:\Miniconda.exe /S /D=C:\xeus-conda
+  - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%MINICONDA%\\Library\\bin;%PATH%"
+
+install:
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda env create --file environment-dev.yml
+  - conda init
+  - conda activate xeus-sql
+  # Build and install xeus-sql
+  - mkdir build
+  - cd build
+  - cmake -G "NMake Makefiles" -D CMAKE_INSTALL_PREFIX=%MINICONDA%\\Library -D CMAKE_PREFIX_PATH=%MINICONDA%\\Library -DXSQL_DOWNLOAD_GTEST=ON -D XEXTRA_JUPYTER_DATA_DIR=%MINICONDA%\\share\\jupyter ..
+  - nmake
+  - nmake install
+
+build_script:
+  - cd test
+  - test_xeus_sql
