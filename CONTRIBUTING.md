@@ -30,6 +30,9 @@ Then you can compile the sources
 mkdir build
 cd build
 cmake -D CMAKE_INSTALL_PREFIX=$CONDA_PREFIX ..
+# You can add options like -DXSQL_WITH_SQLITE3 to make the db type as required
+# and we will handle the runtime error for that db
+# cmake -D CMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DXSQL_WITH_SQLITE3 ..
 make
 make install
 ```

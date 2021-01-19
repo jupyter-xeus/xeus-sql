@@ -24,6 +24,16 @@
 #include "xeus-sql/xeus_sql_interpreter.hpp"
 #include "xeus-sql/soci_handler.hpp"
 
+#ifdef USE_POSTGRE_SQL
+#include "soci/postgresql/soci-postgresql.h"
+#endif
+#ifdef USE_MYSQL
+#include "soci/mysql/soci-mysql.h"
+#endif
+#ifdef USE_SQLITE3
+#include "soci/sqlite3/soci-sqlite3.h"
+#endif
+
 namespace xeus_sql
 {
 
@@ -222,6 +232,18 @@ namespace xeus_sql
             }
         } catch (const std::runtime_error &err) {
             return handle_exception((std::string)err.what());
+#ifdef USE_POSTGRE_SQL
+        } catch (const soci::postgresql_soci_error &err) {
+            return handle_exception((std::string)err.what());
+#endif
+#ifdef USE_MYSQL
+        } catch (const soci::mysql_soci_error &err) {
+            return handle_exception((std::string)err.what());
+#endif
+#ifdef USE_SQLITE3
+        } catch (const soci::sqlite3_soci_error &err) {
+            return handle_exception((std::string)err.what());
+#endif
         } catch (...) {
             // https:  // stackoverflow.com/a/54242936/1203241
             try {
