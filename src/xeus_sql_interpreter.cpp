@@ -60,13 +60,13 @@ namespace xeus_sql
         for (const soci::row& r : rows)
         {
             if (row_count == 0) {
-              html_table << "<table>\n<tr>\n";
-              for (std::size_t i = 0; i != r.size(); ++i) {
-                std::string name = r.get_properties(i).get_name();
-                html_table << "<th>" << name << "</th>\n";
-                plain_table_header.push_back(name);
-              }
-              html_table << "</tr>\n";
+                html_table << "<table>\n<tr>\n";
+                for (std::size_t i = 0; i != r.size(); ++i) {
+                    std::string name = r.get_properties(i).get_name();
+                    html_table << "<th>" << name << "</th>\n";
+                    plain_table_header.push_back(name);
+                }
+                html_table << "</tr>\n";
             }
             row_count++;
             /* Iterates through cols' rows and builds different kinds of
@@ -120,21 +120,21 @@ namespace xeus_sql
         html_table << "</table>";
         const sec duration = clock::now() - before;
         if (row_count == 0) {
-          html_table << std::fixed << std::setprecision(2) << "Empty set ("
-                     << duration.count() << " sec)";
+            html_table << std::fixed << std::setprecision(2) << "Empty set ("
+                       << duration.count() << " sec)";
         } else if (row_count == 1) {
-          html_table << std::fixed << std::setprecision(2) << "1 row in set ("
-                     << duration.count() << " sec)";
+            html_table << std::fixed << std::setprecision(2) << "1 row in set ("
+                       << duration.count() << " sec)";
         } else {
-          html_table << std::fixed << std::setprecision(2) << row_count
-                     << " rows in set (" << duration.count() << " sec)";
+            html_table << std::fixed << std::setprecision(2) << row_count
+                       << " rows in set (" << duration.count() << " sec)";
         }
 
         pub_data["text/plain"] = plain_table.str();
         pub_data["text/html"] = html_table.str();
 
         return pub_data;
-        }
+    }
 
     nl::json interpreter::execute_request_impl(int execution_counter,
                                                const std::string& code,
