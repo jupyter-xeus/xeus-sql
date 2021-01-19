@@ -242,8 +242,15 @@ namespace xeus_sql
                         std::string spec_name = tokenized_input[2];
                         std::string json_str = code;
                         json_str.erase(0, code.find(first_line) + first_line.length());
+                        trim(json_str);
+                        if (json_str.length() == 0) {
+                            throw std::runtime_error("spec is empty: " + code);
+                        }
                         nl::json spec_value = nl::json::parse(json_str);
                         specs[spec_name] = spec_value;
+                        auto bundle = nl::json::object();
+                        bundle["text/plain"] = "SET " + spec_name + " success.";
+                        publish_execution_result(execution_counter, std::move(bundle), nl::json::object());
                         return ok();
                     }
                     nl::json j;
@@ -259,13 +266,16 @@ namespace xeus_sql
                     }
                     std::string sql = code;
                     sql.erase(0, code.find(first_line) + first_line.length());
-                    process_SQL_input(sql, xv_sql_df);
-                    if (xv_sql_df.size() == 0) {
-                        throw std::runtime_error("Empty result from sql, can't render");
+                    trim(sql);
+                    if (sql.length() > 0) {
+                        process_SQL_input(sql, xv_sql_df);
+                        if (xv_sql_df.size() == 0) {
+                            throw std::runtime_error("Empty result from sql, can't render");
+                        }
+                        xv::data_frame data_frame;
+                        data_frame.values = xv_sql_df;
+                        j["data"] = data_frame;
                     }
-                    xv::data_frame data_frame;
-                    data_frame.values = xv_sql_df;
-                    j["data"] = data_frame;
                     auto bundle = nl::json::object();
                     bundle["application/vnd.vegalite.v3+json"] = j;
                     publish_execution_result(execution_counter, std::move(bundle), nl::json::object());
