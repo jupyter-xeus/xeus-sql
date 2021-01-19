@@ -73,9 +73,33 @@ find_package(tabulate REQUIRED)
 find_package(Threads REQUIRED)
 
 find_package(Soci REQUIRED MODULE)
-find_package(PostgreSQL)
-find_package(mysql)
-find_package(SQLite3)
+
+# https://stackoverflow.com/a/15212881/1203241
+OPTION(XSQL_WITH_POSTGRE_SQL "Option to require PostgreSQL" OFF)
+OPTION(XSQL_WITH_MYSQL "Option to require MySQL" OFF)
+OPTION(XSQL_WITH_SQLITE3 "Option to require SQLite3" OFF)
+
+if(XSQL_WITH_POSTGRE_SQL)
+    find_package(PostgreSQL REQUIRED)
+    add_definitions(-DUSE_POSTGRE_SQL=1)
+else()
+    find_package(PostgreSQL)
+endif()
+
+if(XSQL_WITH_MYSQL)
+    find_package(mysql REQUIRED)
+    add_definitions(-DUSE_MYSQL=1)
+else()
+    find_package(mysql)
+endif()
+
+if(XSQL_WITH_SQLITE3)
+    find_package(SQLite3 REQUIRED)
+    add_definitions(-DUSE_SQLITE3=1)
+else()
+    find_package(SQLite3)
+endif()
+
 
 # Target and link
 # ===============
