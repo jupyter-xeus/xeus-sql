@@ -8,14 +8,15 @@
 ****************************************************************************/
 
 #include <cctype>
+#include <chrono>
 #include <cstdio>
 #include <ctime>
 #include <fstream>
 #include <memory>
 #include <set>
 #include <sstream>
-#include <vector>
 #include <tuple>
+#include <vector>
 
 #include "tabulate/table.hpp"
 #include "xeus/xinterpreter.hpp"
@@ -30,34 +31,34 @@ namespace xeus_sql
     {
     }
 
+    using clock = std::chrono::system_clock;
+    using sec = std::chrono::duration<double>;
     nl::json interpreter::process_SQL_input(const std::string& code,
                                             xv::df_type& xv_sql_df)
     {
+        const auto before = clock::now();
+        soci::rowset<soci::row> rows = ((*this->sql).prepare << code);
+
         nl::json pub_data;
         std::vector<std::string> plain_table_header;
         std::vector<std::string> plain_table_row;
 
         tabulate::Table plain_table;
         std::stringstream html_table("");
-
-        soci::rowset<soci::row> rows = ((*this->sql).prepare << code);
-
-        /* Builds table header */
-        const soci::row& first_row = *rows.begin();
-
-        html_table << "<table>\n<tr>\n";
-        for(std::size_t i = 0; i < first_row.size(); ++i)
-        {
-            std::string name = first_row.get_properties(i).get_name();
-            html_table << "<th>" << name << "</th>\n";
-            xv_sql_df[name] = { "name" };
-            plain_table_header.push_back(name);
-        }
-        html_table << "</tr>\n";
-
         /* Builds table body */
+        int row_count = 0;
         for (const soci::row& r : rows)
         {
+            if (row_count == 0) {
+              html_table << "<table>\n<tr>\n";
+              for (std::size_t i = 0; i != r.size(); ++i) {
+                std::string name = r.get_properties(i).get_name();
+                html_table << "<th>" << name << "</th>\n";
+                plain_table_header.push_back(name);
+              }
+              html_table << "</tr>\n";
+            }
+            row_count++;
             /* Iterates through cols' rows and builds different kinds of
                outputs
             */
@@ -93,9 +94,20 @@ namespace xeus_sql
                 plain_table_row.push_back(cell);
                 xv_sql_df[r.get_properties(i).get_name()].push_back(cell);
             }
-                html_table << "</tr>\n";
+            html_table << "</tr>\n";
         }
         html_table << "</table>";
+        const sec duration = clock::now() - before;
+        if (row_count == 0) {
+          html_table << std::fixed << std::setprecision(2) << "Empty set ("
+                     << duration.count() << " sec)";
+        } else if (row_count == 1) {
+          html_table << std::fixed << std::setprecision(2) << "1 row in set ("
+                     << duration.count() << " sec)";
+        } else {
+          html_table << std::fixed << std::setprecision(2) << row_count
+                     << " rows in set (" << duration.count() << " sec)";
+        }
 
         pub_data["text/plain"] = plain_table.str();
         pub_data["text/html"] = html_table.str();
