@@ -68,27 +68,38 @@ namespace xeus_sql
                 std::string cell;
 
                 soci::column_properties props = r.get_properties(i);
-                switch(props.get_data_type())
-                {
-                    case soci::dt_string:
-                        cell = r.get<std::string>(i);
-                        break;
-                    case soci::dt_double:
-                        cell = std::to_string(r.get<double>(i));
-                        break;
-                    case soci::dt_integer:
-                        cell = std::to_string(r.get<int>(i));
-                        break;
-                    case soci::dt_long_long:
-                        cell = std::to_string(r.get<long long>(i));
-                        break;
-                    case soci::dt_unsigned_long_long:
-                        cell = std::to_string(r.get<unsigned long long>(i));
-                        break;
-                    case soci::dt_date:
-                        std::tm when = r.get<std::tm>(i);
-                        cell = std::asctime(&when);
-                        break;
+                try {
+                    switch(props.get_data_type())
+                    {
+                        case soci::dt_string:
+                            cell = r.get<std::string>(i, "NULL");
+                            break;
+                        case soci::dt_double:
+                            cell = std::to_string(r.get<double>(i));
+                            cell.erase(cell.find_last_not_of('0') + 1, std::string::npos);
+                            if (cell.back() == '.') {
+                                cell.pop_back();
+                            }
+                            break;
+                        case soci::dt_integer:
+                            cell = std::to_string(r.get<int>(i));
+                            break;
+                        case soci::dt_long_long:
+                            cell = std::to_string(r.get<long long>(i));
+                            break;
+                        case soci::dt_unsigned_long_long:
+                            cell = std::to_string(r.get<unsigned long long>(i));
+                            break;
+                        case soci::dt_xml:
+                        case soci::dt_blob:
+                            break;
+                        case soci::dt_date:
+                            std::tm when = r.get<std::tm>(i);
+                            cell = std::asctime(&when);
+                            break;
+                    }
+                } catch (...) {
+                    cell = "NULL";
                 }
                 html_table << "<td>" << cell << "</td>\n";
                 plain_table_row.push_back(cell);
@@ -123,6 +134,17 @@ namespace xeus_sql
                                                bool /*allow_stdin*/)
     {
         std::vector<std::string> traceback;
+        auto handle_exception = [&](std::string what) {
+            nl::json jresult;
+            jresult["status"] = "error";
+            jresult["ename"] = "Error";
+            jresult["evalue"] = what;
+            traceback.push_back((std::string)jresult["ename"] + ": " + what);
+            publish_execution_error(jresult["ename"], jresult["evalue"], traceback);
+            traceback.clear();
+            return jresult;
+        };
+
         std::string sanitized_code = xv_bindings::sanitize_string(code);
         std::vector<std::string> tokenized_input = xv_bindings::tokenizer(sanitized_code);
 
@@ -175,7 +197,10 @@ namespace xeus_sql
                 if (this->sql)
                 {
                     /* Shows rich output for tables */
-                    if (xv_bindings::case_insentive_equals("SELECT", tokenized_input[0]))
+                    if (xv_bindings::case_insentive_equals("SELECT", tokenized_input[0]) ||
+                        xv_bindings::case_insentive_equals("DESC", tokenized_input[0]) ||
+                        xv_bindings::case_insentive_equals("DESCRIBE", tokenized_input[0]) ||
+                        xv_bindings::case_insentive_equals("SHOW", tokenized_input[0]))
                     {
                         nl::json data = process_SQL_input(code, xv_sql_df);
 
@@ -195,25 +220,24 @@ namespace xeus_sql
                     throw("Database was not loaded.");
                 }
             }
-
-            nl::json jresult;
-            jresult["status"] = "ok";
-            jresult["payload"] = nl::json::array();
-            jresult["user_expressions"] = nl::json::object();
-            return jresult;
+        } catch (const std::runtime_error &err) {
+            return handle_exception((std::string)err.what());
+        } catch (...) {
+            // https:  // stackoverflow.com/a/54242936/1203241
+            try {
+                std::exception_ptr curr_excp;
+                if ((curr_excp = std::current_exception())) {
+                std::rethrow_exception(curr_excp);
+                }
+            } catch (const std::exception &err) {
+                return handle_exception((std::string)err.what());
+            }
         }
-
-        catch (const std::runtime_error& err)
-        {
-            nl::json jresult;
-            jresult["status"] = "error";
-            jresult["ename"] = "Error";
-            jresult["evalue"] = err.what();
-            traceback.push_back((std::string)jresult["ename"] + ": " + (std::string)err.what());
-            publish_execution_error(jresult["ename"], jresult["evalue"], traceback);
-            traceback.clear();
-            return jresult;
-        }
+        nl::json jresult;
+        jresult["status"] = "ok";
+        jresult["payload"] = nl::json::array();
+        jresult["user_expressions"] = nl::json::object();
+        return jresult;
     }
 
     nl::json interpreter::complete_request_impl(const std::string& /*code*/,
