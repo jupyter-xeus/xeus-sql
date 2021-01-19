@@ -1,0 +1,26 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "data": {"url": "data/movies.json"},
+  "mark": "rect",
+  "width": 600,
+  "height": 400,
+  "encoding": {
+    "x": {
+      "field": "Country",
+      "type": "nominal"
+    },
+    "y": {
+      "field": "Genre",
+      "type": "nominal"
+    },
+    "color": {
+      "type": "quantitative",
+      "field": "c"
+    }
+  },
+  "config": {
+    "view": {
+      "stroke": "transparent"
+    }
+  }
+}

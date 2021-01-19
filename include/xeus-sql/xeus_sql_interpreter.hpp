@@ -50,6 +50,7 @@ namespace xeus_sql
                                    xv::df_type& xv_sqlite_df);
 
         std::unique_ptr<soci::session> sql;
+        std::map<std::string, nl::json> specs;
     };
 }
 

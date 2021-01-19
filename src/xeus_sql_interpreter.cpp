@@ -7,11 +7,13 @@
 * The full license is in the file LICENSE, distributed with this software. *
 ****************************************************************************/
 
+#include <algorithm>
 #include <cctype>
 #include <chrono>
 #include <cstdio>
 #include <ctime>
 #include <fstream>
+#include <locale>
 #include <memory>
 #include <set>
 #include <sstream>
@@ -39,6 +41,28 @@ namespace xeus_sql
 
     void interpreter::configure_impl()
     {
+    }
+
+    // trim string https://stackoverflow.com/a/217605/1203241
+
+    // trim from start (in place)
+    static inline void ltrim(std::string &s) {
+        s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
+            return !std::isspace(ch);
+        }));
+    }
+
+    // trim from end (in place)
+    static inline void rtrim(std::string &s) {
+        s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
+            return !std::isspace(ch);
+        }).base(), s.end());
+    }
+
+    // trim from both ends (in place)
+    static inline void trim(std::string &s) {
+        ltrim(s);
+        rtrim(s);
     }
 
     using clock = std::chrono::system_clock;
@@ -143,6 +167,14 @@ namespace xeus_sql
                                                nl::json /*user_expressions*/,
                                                bool /*allow_stdin*/)
     {
+        auto ok = []() {
+            nl::json jresult;
+            jresult["status"] = "ok";
+            jresult["payload"] = nl::json::array();
+            jresult["user_expressions"] = nl::json::object();
+            return jresult;
+        };
+
         std::vector<std::string> traceback;
         auto handle_exception = [&](std::string what) {
             nl::json jresult;
@@ -155,9 +187,14 @@ namespace xeus_sql
             return jresult;
         };
 
-        std::string sanitized_code = xv_bindings::sanitize_string(code);
-        std::vector<std::string> tokenized_input = xv_bindings::tokenizer(sanitized_code);
-
+        // we only need to tokenize the first line
+        std::istringstream iss(code);
+        std::string first_line;
+        while (std::getline(iss, first_line)) {
+            trim(first_line);
+            if (first_line.size() > 0) break;
+        }
+        std::vector<std::string> tokenized_input = xv_bindings::tokenizer(first_line);
         xv::df_type xv_sql_df;
         try
         {
@@ -170,6 +207,7 @@ namespace xeus_sql
                 /* Runs xvega magic and SQL code */
                 if(xv_bindings::is_xvega(tokenized_input))
                 {
+                    tokenized_input = xv_bindings::tokenizer(code);
                     /* Removes XVEGA_PLOT command */
                     tokenized_input.erase(tokenized_input.begin());
 
@@ -191,11 +229,47 @@ namespace xeus_sql
                                              std::move(chart),
                                              nl::json::object());
 
-                    nl::json jresult;
-                    jresult["status"] = "ok";
-                    jresult["payload"] = nl::json::array();
-                    jresult["user_expressions"] = nl::json::object();
-                    return jresult;
+                    return ok();
+                } else if (xv_bindings::case_insentive_equals("VEGA-LITE", tokenized_input[0])) {
+                    if (tokenized_input.size() < 2) {
+                        throw std::runtime_error("invalid input: " + code);
+                    }
+                    if (xv_bindings::case_insentive_equals("SET", tokenized_input[1])) {
+                        // define vega-lite specs
+                        if (tokenized_input.size() < 3) {
+                            throw std::runtime_error("invalid input: " + code);
+                        }
+                        std::string spec_name = tokenized_input[2];
+                        std::string json_str = code;
+                        json_str.erase(0, code.find(first_line) + first_line.length());
+                        nl::json spec_value = nl::json::parse(json_str);
+                        specs[spec_name] = spec_value;
+                        return ok();
+                    }
+                    nl::json j;
+                    auto v = specs.find(tokenized_input[1]);
+                    if (v != specs.end()) {
+                        j = v->second;
+                    } else {
+                        std::ifstream i(tokenized_input[1]);
+                        if (!i.good()) {
+                            throw std::runtime_error("invalid file name: " + tokenized_input[1]);
+                        }
+                        i >> j;
+                    }
+                    std::string sql = code;
+                    sql.erase(0, code.find(first_line) + first_line.length());
+                    process_SQL_input(sql, xv_sql_df);
+                    if (xv_sql_df.size() == 0) {
+                        throw std::runtime_error("Empty result from sql, can't render");
+                    }
+                    xv::data_frame data_frame;
+                    data_frame.values = xv_sql_df;
+                    j["data"] = data_frame;
+                    auto bundle = nl::json::object();
+                    bundle["application/vnd.vegalite.v3+json"] = j;
+                    publish_execution_result(execution_counter, std::move(bundle), nl::json::object());
+                    return ok();
                 }
 
                 /* Parses LOAD magic */
@@ -255,11 +329,7 @@ namespace xeus_sql
                 return handle_exception((std::string)err.what());
             }
         }
-        nl::json jresult;
-        jresult["status"] = "ok";
-        jresult["payload"] = nl::json::array();
-        jresult["user_expressions"] = nl::json::object();
-        return jresult;
+        return ok();
     }
 
     nl::json interpreter::complete_request_impl(const std::string& /*code*/,
