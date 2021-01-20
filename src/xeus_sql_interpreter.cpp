@@ -50,8 +50,6 @@ namespace xeus_sql
         soci::rowset<soci::row> rows = ((*this->sql).prepare << code);
 
         nl::json pub_data;
-        std::vector<std::string> plain_table_header;
-        std::vector<std::string> plain_table_row;
 
         tabulate::Table plain_table;
         std::stringstream html_table("");
@@ -60,18 +58,21 @@ namespace xeus_sql
         for (const soci::row& r : rows)
         {
             if (row_count == 0) {
+                std::vector<variant<std::string, const char*, tabulate::Table>> col_names;
                 html_table << "<table>\n<tr>\n";
                 for (std::size_t i = 0; i != r.size(); ++i) {
                     std::string name = r.get_properties(i).get_name();
                     html_table << "<th>" << name << "</th>\n";
-                    plain_table_header.push_back(name);
+                    col_names.push_back(name);
                 }
                 html_table << "</tr>\n";
+                plain_table.add_row(col_names);
             }
             row_count++;
             /* Iterates through cols' rows and builds different kinds of
                outputs
             */
+            std::vector<variant<std::string, const char*, tabulate::Table>> row;
             html_table << "<tr>\n";
             for(std::size_t i = 0; i != r.size(); ++i)
             {
@@ -112,26 +113,29 @@ namespace xeus_sql
                     cell = "NULL";
                 }
                 html_table << "<td>" << cell << "</td>\n";
-                plain_table_row.push_back(cell);
+                row.push_back(cell);
                 xv_sql_df[r.get_properties(i).get_name()].push_back(cell);
             }
+            plain_table.add_row(row);
             html_table << "</tr>\n";
         }
         html_table << "</table>";
         const sec duration = clock::now() - before;
+        std::stringstream footer;
+        footer << "\n";
         if (row_count == 0) {
-            html_table << std::fixed << std::setprecision(2) << "Empty set ("
+            footer << std::fixed << std::setprecision(2) << "Empty set ("
                        << duration.count() << " sec)";
         } else if (row_count == 1) {
-            html_table << std::fixed << std::setprecision(2) << "1 row in set ("
+            footer << std::fixed << std::setprecision(2) << "1 row in set ("
                        << duration.count() << " sec)";
         } else {
-            html_table << std::fixed << std::setprecision(2) << row_count
+            footer << std::fixed << std::setprecision(2) << row_count
                        << " rows in set (" << duration.count() << " sec)";
         }
 
-        pub_data["text/plain"] = plain_table.str();
-        pub_data["text/html"] = html_table.str();
+        pub_data["text/plain"] = plain_table.str() + footer.str();
+        pub_data["text/html"] = html_table.str() + footer.str();
 
         return pub_data;
     }
