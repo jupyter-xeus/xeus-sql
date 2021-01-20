@@ -309,17 +309,17 @@ namespace xeus_sql
            SOCI version: x.x.x
         */
 
-        std::string banner = ""
-            "                                _  "
-            "                               | | "
-            "__  _____ _   _ ___   ___  __ _| | "
-            "\\ \\/ / _ \\ | | / __| / __|/ _` | | "
-            " >  <  __/ |_| \\__ \\ \\__ \\ (_| | | "
-            "/_/\\_\\___|\\__,_|___/ |___/\\__, |_| "
-            "                             | |   "
-            "                             |_|  "
-            "  xeus-sql: a Jupyter kernel for SOCI\n"
-            "  SOCI version: ";
+        std::string banner = R"V0G0N(
+            "                                _    "
+            "                               | |   "
+            "__  _____ _   _ ___   ___  __ _| |   "
+            "\ \/ / _ \ | | / __| / __|/ _` | |   "
+            " >  <  __/ |_| \__ \ \__ \ (_| | |   "
+            "/_/\_\___|\__,_|___/ |___/\__, |_|   "
+            "                             | |     "
+            "                             |_|     "
+            "  xeus-sql: a Jupyter kernel for SOCI"
+            "  SOCI version: ")V0G0N";
         banner.append(XSQL_VERSION);
 
         result["banner"] = banner;
