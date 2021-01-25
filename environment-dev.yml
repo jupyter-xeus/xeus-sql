@@ -5,13 +5,12 @@ dependencies:
   # Builde dependencies
   - cmake
   # host dependencies
-  - xeus
+  - xeus=1.0.0
   - cppzmq
-  - zeromq
   - nlohmann_json
-  - xtl
+  - xtl=0.7.0
   - cpp-tabulate
   - soci-core
-  - xproperty
-  - xvega-bindings
-  - xvega
+  - xproperty=0.11.0
+  - xvega-bindings=0.0.10
+  - xvega=0.0.10
