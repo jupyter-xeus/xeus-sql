@@ -73,7 +73,8 @@ https://xeus-sql.readthedocs.io/en/latest/
 | `xeus-sql`  |      `xeus`     | `PostgreSQL*`   |    `SQLite*`    |   `MySQL*`      |    `Tabulate`   | `nlohmann_json` |   `xvega`   | `soci-core` | `xproperty` | `xvega-bindings` |
 |--------------|-----------------|-----------------|-----------------|-----------------|-----------------|----------------|-------------|------------|-----------|--------------|
 |    master    | >=1.0.0, <2.0   | >=3.30.1, <4    | >=3.0.0, <4     | >=1.3.0,<2.0    |                 |>=3.0.0         |   >= 0.0.10 | 4.0.1      | >=0.11.0    | >=0.0.3          |
-|    =>0.0.4    | >=0.24.0, <0.25 | >=3.30.1, <4    | >=3.0.0, <4     | >=1.3.0,<2.0    |                 |>=3.0.0         |   >= 0.0.5  | 4.0.1      | 0.10.4      | >=0.0.3          |
+|    0.0.7     | >=1.0.0, <2.0.0 | >=3.30.1, <4    | >=3.0.0, <4     | >=1.3.0,<2.0    |                 |>=3.0.0         |   >= 0.0.10 | 4.0.1      | 0.10.4      | >=0.0.3          |
+|    <=0.0.6   | >=0.24.0, <0.25 | >=3.30.1, <4    | >=3.0.0, <4     | >=1.3.0,<2.0    |                 |>=3.0.0         |   >= 0.0.5  | 4.0.1      | 0.10.4      | >=0.0.3          |
 
 \* These are optional dependencies that come by default with `xeus-sql` but may or may not be added to your project in case you're building manually. For more information check the CONTRIBUTING file.
 
