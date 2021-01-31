@@ -230,7 +230,7 @@ namespace xeus_sql
                                              nl::json::object());
 
                     return ok();
-                } else if (xv_bindings::case_insentive_equals("VEGA-LITE", tokenized_input[0])) {
+                } else if (xv_bindings::case_insentive_equals("VEGA_LITE", tokenized_input[0])) {
                     if (tokenized_input.size() < 2) {
                         throw std::runtime_error("invalid input: " + code);
                     }
