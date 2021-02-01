@@ -49,8 +49,10 @@ namespace xeus_sql
         nl::json process_SQL_input(const std::string& code,
                                    xv::df_type& xv_sqlite_df);
 
+        std::string rewrite_code(const std::string& code, std::vector<std::string> tokenized_input);
         std::unique_ptr<soci::session> sql;
         std::map<std::string, nl::json> specs;
+        std::string current_backend;
     };
 }
 

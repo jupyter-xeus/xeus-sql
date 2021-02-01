@@ -288,19 +288,22 @@ namespace xeus_sql
 
                 /* Parses LOAD magic */
                 this->sql = parse_SQL_magic(tokenized_input);
+                this->current_backend = this->sql->get_backend_name();
             }
             /* Runs SQL code */
             else
             {
                 if (this->sql)
                 {
+                    std::string rewrited_code = this->rewrite_code(code, tokenized_input);
+                    tokenized_input = xv_bindings::tokenizer(rewrited_code);
                     /* Shows rich output for tables */
                     if (xv_bindings::case_insentive_equals("SELECT", tokenized_input[0]) ||
                         xv_bindings::case_insentive_equals("DESC", tokenized_input[0]) ||
                         xv_bindings::case_insentive_equals("DESCRIBE", tokenized_input[0]) ||
                         xv_bindings::case_insentive_equals("SHOW", tokenized_input[0]))
                     {
-                        nl::json data = process_SQL_input(code, xv_sql_df);
+                        nl::json data = process_SQL_input(rewrited_code, xv_sql_df);
 
                         publish_execution_result(execution_counter,
                                                  std::move(data),
@@ -310,7 +313,7 @@ namespace xeus_sql
                     /* Execute all SQL commands that don't output tables */
                     else
                     {
-                        *this->sql << code;
+                        *this->sql << rewrited_code;
                     }
                 }
                 else
@@ -344,6 +347,54 @@ namespace xeus_sql
             }
         }
         return ok();
+    }
+
+    std::string interpreter::rewrite_code(const std::string& code, std::vector<std::string> tokenized_input) {
+        if (this->current_backend == "sqlite3") {
+            /** dot commands are implemented in sqlite-shell, we need to rewrite it to the internal sql commands
+             *  https://sqlite.org/cli.html#querying_the_database_schema
+             *  https://sqlite.org/forum/forumpost/d90adfbb0a
+             *  https://www.techonthenet.com/sqlite/sys_tables/index.php
+             *  NOTE: sqlite_master is an alias to sqlite_schema, and should be working for all sqlite3 version
+             */ 
+            if (tokenized_input[0] == ".databases") {
+                return "SELECT name || ': ' || file AS databases FROM pragma_database_list;";
+            } else if (tokenized_input[0] == ".tables") {
+                if (tokenized_input.size() > 1) {
+                    return "SELECT name FROM sqlite_master "  // NOTE: we should have an extra space for concat strings
+                           "WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%' AND name LIKE '" + tokenized_input[1] + "' "
+                           "ORDER BY 1";
+                } else {
+                    return "SELECT name FROM sqlite_master " 
+                           "WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%' "
+                           "ORDER BY 1";
+                }
+            } else if (tokenized_input[0] == ".schema") {
+                if (tokenized_input.size() > 1) {
+                    return "SELECT sql FROM sqlite_master "
+                           "WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%' AND name LIKE '" + tokenized_input[1] + "' "
+                           "ORDER BY tbl_name, type DESC, name";
+                } else {
+                    return "SELECT sql FROM sqlite_master "
+                           "WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%' "
+                           "ORDER BY tbl_name, type DESC, name";
+                }
+            } else if (tokenized_input[0] == ".indexes") {
+                if (tokenized_input.size() > 1) {
+                    return "SELECT sql FROM sqlite_master "
+                           "WHERE type='index' AND name NOT LIKE 'sqlite_%' AND name LIKE '" + tokenized_input[1] + "' "
+                           "ORDER BY tbl_name, type DESC, name";
+                } else {
+                    return "SELECT sql FROM sqlite_master "
+                           "WHERE type='index' AND name NOT LIKE 'sqlite_%' "
+                           "ORDER BY tbl_name, type DESC, name";
+                }
+            } else if (tokenized_input[0].rfind(".", 0) == 0) { // start with
+                throw std::runtime_error("dot command " + tokenized_input[0] + " is not supported for now. "
+                                         "Currently we only support .databases .tables .schema .indexes");
+            }
+        }
+        return code;
     }
 
     nl::json interpreter::complete_request_impl(const std::string& /*code*/,
