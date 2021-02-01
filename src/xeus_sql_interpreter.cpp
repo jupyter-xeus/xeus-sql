@@ -319,7 +319,7 @@ namespace xeus_sql
             "                             | |     "
             "                             |_|     "
             "  xeus-sql: a Jupyter kernel for SOCI"
-            "  SOCI version: ")V0G0N";
+            "  XSQL version: ")V0G0N";
         banner.append(XSQL_VERSION);
 
         result["banner"] = banner;
