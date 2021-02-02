@@ -14,3 +14,4 @@ dependencies:
   - xvega
   - xeus-sql
   - soci-sqlite
+  - soci-core
