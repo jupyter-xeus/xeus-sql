@@ -12,6 +12,6 @@ dependencies:
   - xproperty
   - xvega-bindings
   - xvega
-  - xeus-sql=0.0.7
+  - xeus-sql
   - soci-sqlite
   - soci-core
