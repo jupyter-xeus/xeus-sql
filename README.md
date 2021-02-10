@@ -51,7 +51,7 @@ With mamba:
 mamba install xeus-sql jupyterlab -c conda-forge
 ```
 
-Conda forge offers packaged versions for MySQL, PostgreSQL and SQLite and you can download them with: `soci-mysql`, `soci-postresql` or `soci-sqlite`.
+Conda forge offers packaged versions for MySQL, PostgreSQL and SQLite and you can download them with: `soci-mysql`, `soci-postgresql` or `soci-sqlite`.
 
 `xeus-sql` includes `soci-core` only. Which consists on the SOCI package with no DB extension attached.
 
