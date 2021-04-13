@@ -22,27 +22,27 @@ Note that `xeus-sql` support the following SQL implementations:
 
 ## Installation
 
-`xeus-sql` has been packaged for the conda package manager.
+`xeus-sql` has been packaged for the mamba (or conda) package manager.
 
-To ensure that the installation works, it is preferable to install `xeus-sql` in a fresh conda environment.
+To ensure that the installation works, it is preferable to install `xeus-sql` in a fresh environment.
 
-To ensure that the installation works, it is preferable to install `xeus` in a fresh conda environment. It is also needed to use
-a [miniconda](https://conda.io/miniconda.html) installation because with the full [anaconda](https://www.anaconda.com/)
+To ensure that the installation works, it is preferable to install `xeus` in a fresh environment. It is also needed to use
+a [miniforge](https://github.com/conda-forge/miniforge#mambaforge) or [miniconda](https://conda.io/miniconda.html) installation because with the full [anaconda](https://www.anaconda.com/)
 you may have a conflict.
 
-The safest usage is to create an environment named `xeus-sql` with your miniconda installation
+The safest usage is to create an environment named `xeus-sql`
 
 ```
-conda create -n xeus-sql
-conda activate xeus-sql
+mamba create -n xeus-sql
+source activate xeus-sql
 ```
 
-### Installing from conda
+### Installing from conda-forge
 
-To install xeus-sql with the conda package manager:
+To install xeus-sql with the mamba (or conda) package manager:
 
 ```
-conda install xeus-sql jupyterlab -c conda-forge
+mamba install xeus-sql jupyterlab -c conda-forge
 ```
 
 With mamba:
