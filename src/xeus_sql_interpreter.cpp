@@ -130,7 +130,8 @@ namespace xeus_sql
                             break;
                         case soci::dt_date:
                             std::tm when = r.get<std::tm>(i);
-                            cell = std::asctime(&when);
+                            char buffer [80];
+                            cell = std::strftime(buffer, 80, "%Y-%m-%e %H:%M:%S", &when);
                             break;
                     }
                 } catch (...) {
