@@ -1,5 +1,0 @@
-name: xeus-sql
-channels:
-  - conda-forge
-dependencies:
-  - xeus-sql=0.0.8

@@ -2,16 +2,6 @@ name: xeus-sql
 channels:
   - conda-forge
 dependencies:
-  - cmake
-  - xeus
-  - cppzmq
-  - zeromq
-  - nlohmann_json
-  - xtl
-  - cpp-tabulate
-  - xproperty
-  - xvega-bindings
-  - xvega
-  - xeus-sql
+  - xeus-sql=0.0.8
   - soci-sqlite
   - soci-core
