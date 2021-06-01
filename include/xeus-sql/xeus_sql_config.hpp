@@ -12,8 +12,8 @@
 
 // Project version
 #define XSQL_VERSION_MAJOR 0
-#define XSQL_VERSION_MINOR 0
-#define XSQL_VERSION_PATCH 8
+#define XSQL_VERSION_MINOR 1
+#define XSQL_VERSION_PATCH 0
 
 // Composing the version string from major, minor and patch
 #define XSQL_CONCATENATE(A, B) XSQL_CONCATENATE_IMPL(A, B)

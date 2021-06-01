@@ -70,13 +70,25 @@ https://xeus-sql.readthedocs.io/en/latest/
 - [PostgreSQL\*](https://github.com/postgres)
 - [MySQL\*](https://github.com/mysql/mysql-server)
 
-| `xeus-sql`  |      `xeus`     | `PostgreSQL*`   |    `SQLite*`    |   `MySQL*`      |    `Tabulate`   | `nlohmann_json` |   `xvega`   | `soci-core` | `xproperty` | `xvega-bindings` |
-|--------------|-----------------|-----------------|-----------------|-----------------|-----------------|----------------|-------------|------------|-----------|--------------|
-|    master    | >=1.0.0, <2.0   | >=3.30.1, <4    | >=3.0.0, <4     | >=1.3.0,<2.0    |       >=1.4|>=3.0.0         |   >= 0.0.10 | 4.0.1      | >=0.11.0    | >=0.0.3          |
-|    <=0.0.8     | >=1.0.0, <2.0.0 | >=3.30.1, <4    | >=3.0.0, <4     | >=1.3.0,<2.0    |       >=1.4|>=3.0.0         |   >= 0.0.10 | 4.0.1      | 0.10.4      | >=0.0.3          |
-|    <=0.0.6   | >=0.24.0, <0.25 | >=3.30.1, <4    | >=3.0.0, <4     | >=1.3.0,<2.0    |       >=1.4|>=3.0.0         |   >= 0.0.5  | 4.0.1      | 0.10.4      | >=0.0.3          |
+##### xeus dependencies
 
-\* These are optional dependencies that come by default with `xeus-sql` but may or may not be added to your project in case you're building manually. For more information check the CONTRIBUTING file.
+| `xeus-sql` | `xeus`          | `tabulate`     | `nlohmann_json`    | `xproperty` | `xvega-bindings` | `soci-core` |
+|------------|-----------------|----------------|--------------------|-------------|------------------|-------------|
+| master     | >=1.0.0, <2.0   | >=1.4\|>=3.0.0 | >= 0.0.10 \| 4.0.1 | >=0.11.0    | >=0.0.10         | >=4.0.1     |
+| <=0.1.0    | >=1.0.0, <2.0   | >=1.4\|>=3.0.0 | >= 0.0.10 \| 4.0.1 | >=0.10.4    | >=0.0.10         | >=4.0.1     |
+| <=0.0.8    | >=1.0.0, <2.0   | >=1.4\|>=3.0.0 | >= 0.0.10 \| 4.0.1 | >=0.10.4    | >=0.0.10         | >=4.0.1     |
+| <=0.0.6    | >=0.24.0, <0.25 | >=1.4\|>=3.0.0 | >= 0.0.5 \| 4.0.1  | >=0.10.4    | >=0.0.3          | >=4.0.1     |
+
+##### SQL dependencies
+
+These are optional dependencies that come by default with `xeus-sql` but may or may not be added to your project in case you're building manually. For more information check the CONTRIBUTING file.
+
+| `xeus-sql` | `PostgreSQL` | `SQLite`    | `MySQL`      | `soci-sqlite`, `soci-postgres`, `soci-mysql` |
+|------------|--------------|-------------|--------------|----------------------------------------------|
+| master     | >=3.30.1, <4 | >=3.0.0, <4 | >=1.3.0,<2.0 | >=4.0.1                                      |
+| <=0.1.0    | >=3.30.1, <4 | >=3.0.0, <4 | >=1.3.0,<2.0 | >=4.0.1                                      |
+| <=0.0.8    | >=3.30.1, <4 | >=3.0.0, <4 | >=1.3.0,<2.0 | >=4.0.1                                      |
+| <=0.0.6    | >=3.30.1, <4 | >=3.0.0, <4 | >=1.3.0,<2.0 | >=4.0.1                                      |
 
 ## Contributing
 
