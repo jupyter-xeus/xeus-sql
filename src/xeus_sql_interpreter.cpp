@@ -131,7 +131,7 @@ namespace xeus_sql
                         case soci::dt_date:
                             std::tm when = r.get<std::tm>(i);
                             char buffer [20];
-                            std::strftime(buffer, 20, "%Y-%m-%e %H:%M:%S", &when);
+                            std::strftime(buffer, 20, "%Y-%m-%d %H:%M:%S", &when);
                             cell = buffer;
                             break;
                     }
@@ -379,14 +379,14 @@ namespace xeus_sql
         result["implementation_version"] = XSQL_VERSION;
 
         /* The jupyter-console banner for xeus-sql is the following:
-                                            _ 
+                                            _
                                            | |
             __  _____ _   _ ___   ___  __ _| |
             \ \/ / _ \ | | / __| / __|/ _` | |
              >  <  __/ |_| \__ \ \__ \ (_| | |
             /_/\_\___|\__,_|___/ |___/\__, |_|
-                                         | |  
-                                         |_| 
+                                         | |
+                                         |_|
            xeus-sql: a Jupyter kernel for SOCI
            SOCI version: x.x.x
         */
