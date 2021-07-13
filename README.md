@@ -6,6 +6,8 @@
 
 `xeus-sql` is a Jupyter kernel for general SQL implementations based on the native implementation of the Jupyter protocol [xeus](https://github.com/jupyter-xeus/xeus) and [SOCI](https://github.com/SOCI/soci), a database access library for C++.
 
+![xeus-sql screencast](xeus-sql-screencast.gif)
+
 ## Usage
 
 Launch the Jupyter notebook with `jupyter notebook` or Jupyter lab with `jupyter lab` and launch a new SQL notebook by selecting the **xsql** kernel.
