@@ -64,7 +64,7 @@ OPTION(gtest_disable_pthreads "Disable uses of pthreads in gtest." ON)
 # ============
 
 # Be sure to use recent versions
-set(xeus_REQUIRED_VERSION 1.0.0)
+set(xeus_REQUIRED_VERSION 2.0.0)
 
 find_package(xeus ${xeus_REQUIRED_VERSION} REQUIRED)
 find_package(xvega)
