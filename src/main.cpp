@@ -12,6 +12,7 @@
 
 #include "xeus/xkernel.hpp"
 #include "xeus/xkernel_configuration.hpp"
+#include "xeus/xserver_shell_main.hpp"
 
 #include "xeus-sql/xeus_sql_interpreter.hpp"
 
@@ -39,6 +40,8 @@ int main(int argc, char* argv[])
     // Load configuration file
     std::string file_name = extract_filename(argc, argv);
 
+    auto context = xeus::make_context<zmq::context_t>();
+
     // Create interpreter instance
     using interpreter_ptr = std::unique_ptr<xeus_sql::interpreter>;
     interpreter_ptr interpreter = std::make_unique<xeus_sql::interpreter>();
@@ -55,11 +58,12 @@ int main(int argc, char* argv[])
 
         xeus::xkernel kernel(config,
                              xeus::get_user_name(),
+                             std::move(context),
                              std::move(interpreter),
+                             xeus::make_xserver_shell_main,
                              std::move(hist),
                              xeus::make_console_logger(xeus::xlogger::msg_type,
-                                                       xeus::make_file_logger(xeus::xlogger::content, "xeus.log")),
-                             xeus::make_xserver_shell_main);
+                                                       xeus::make_file_logger(xeus::xlogger::content, "xeus.log")));
 
         std::clog <<
             "Starting xeus-sql kernel...\n\n"
@@ -72,10 +76,11 @@ int main(int argc, char* argv[])
     else
     {
         xeus::xkernel kernel(xeus::get_user_name(),
+                             std::move(context),
                              std::move(interpreter),
+                             xeus::make_xserver_shell_main,
                              std::move(hist),
-                             nullptr,
-                             xeus::make_xserver_shell_main);
+                             nullptr);
 
         const auto& config = kernel.get_config();
         std::clog <<
