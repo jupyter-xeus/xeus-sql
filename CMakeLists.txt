@@ -201,7 +201,6 @@ macro(xsql_create_target target_name linkage output_name)
 
     target_include_directories(${target_name}
                                PUBLIC
-                               ${XSQL_INCLUDE_DIRS}
                                $<BUILD_INTERFACE:${XEUS_SQL_INCLUDE_DIR}>
                                $<INSTALL_INTERFACE:include>)
 
