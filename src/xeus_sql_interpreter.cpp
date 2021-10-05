@@ -37,7 +37,10 @@
 #endif
 
 namespace xeus_sql
-{
+{       
+    // implemented at the end of the file
+    // for better  readability
+    const std::array<std::string, 826> & get_keywords();
 
     inline bool startswith(const std::string& str, const std::string& cmp)
     {
@@ -358,6 +361,115 @@ namespace xeus_sql
     }
     nl::json interpreter::complete_request_impl(const std::string& raw_code,
                                                 int cursor_pos)
+    {
+
+        nl::json result;
+
+        const auto & keywords = get_keywords();
+
+        nl::json matches = nl::json::array();
+
+        // first we get  a substring from string[0:curser_pos+1]std
+        // and discard the right side of the curser pos
+        const auto code = raw_code.substr(0, cursor_pos);
+
+
+        // keyword matches
+        // ............................
+        {
+            auto pos = -1;
+            for(int i=code.size()-1; i>=0; --i)
+            {   
+                if(!is_identifier(code[i]))
+                {
+                    pos = i;
+                    break;
+                }
+            }
+            result["cursor_start"] =  pos == -1 ? 0 : pos +1;
+            auto to_match = pos == -1 ? code : code.substr(pos+1, code.size() -(pos+1));
+
+            // check for kw matches
+            for(auto kw : keywords)
+            {
+                if(startswith(kw, to_match))
+                {
+                    matches.push_back(kw);
+                }
+            }
+        }
+
+        result["status"] = "ok";
+        result["cursor_end"] = cursor_pos;
+        result["matches"] =matches;
+
+        return result;
+    };
+
+    nl::json interpreter::inspect_request_impl(const std::string& /*code*/,
+                                               int /*cursor_pos*/,
+                                               int /*detail_level*/)
+    {
+        nl::json jresult;
+        jresult["status"] = "ok";
+        return jresult;
+    };
+
+    nl::json interpreter::is_complete_request_impl(const std::string& /*code*/)
+    {
+        nl::json jresult;
+        jresult["status"] = "complete";
+        return jresult;
+    };
+
+    nl::json interpreter::kernel_info_request_impl()
+    {
+        nl::json result;
+        result["implementation"] = "xsql";
+        result["implementation_version"] = XSQL_VERSION;
+
+        /* The jupyter-console banner for xeus-sql is the following:
+                                            _
+                                           | |
+            __  _____ _   _ ___   ___  __ _| |
+            \ \/ / _ \ | | / __| / __|/ _` | |
+             >  <  __/ |_| \__ \ \__ \ (_| | |
+            /_/\_\___|\__,_|___/ |___/\__, |_|
+                                         | |
+                                         |_|
+           xeus-sql: a Jupyter kernel for SOCI
+           SOCI version: x.x.x
+        */
+
+        std::string banner = R"V0G0N(
+            "                                _    "
+            "                               | |   "
+            "__  _____ _   _ ___   ___  __ _| |   "
+            "\ \/ / _ \ | | / __| / __|/ _` | |   "
+            " >  <  __/ |_| \__ \ \__ \ (_| | |   "
+            "/_/\_\___|\__,_|___/ |___/\__, |_|   "
+            "                             | |     "
+            "                             |_|     "
+            "  xeus-sql: a Jupyter kernel for SOCI"
+            "  XSQL version: ")V0G0N";
+        banner.append(XSQL_VERSION);
+
+        result["banner"] = banner;
+        //TODO: This should change with the language
+        result["language_info"]["name"] = "mysql";
+        result["language_info"]["codemirror_mode"] = "sql";
+        result["language_info"]["version"] = XSQL_VERSION;
+        result["language_info"]["mimetype"] = "";
+        result["language_info"]["file_extension"] = "";
+        return result;
+    }
+
+    void interpreter::shutdown_request_impl()
+    {
+    }
+
+
+    const std::array<std::string, 826> & get_keywords()
     {
         static const std::array<std::string, 826> keywords =  
         {
@@ -1188,109 +1300,8 @@ namespace xeus_sql
             "ZEROFILL",
             "ZONE"
         };
-
-        nl::json result;
-
-
-        nl::json matches = nl::json::array();
-
-        // first we get  a substring from string[0:curser_pos+1]std
-        // and discard the right side of the curser pos
-        const auto code = raw_code.substr(0, cursor_pos);
-
-
-        // keyword matches
-        // ............................
-        {
-            auto pos = -1;
-            for(int i=code.size()-1; i>=0; --i)
-            {   
-                if(!is_identifier(code[i]))
-                {
-                    pos = i;
-                    break;
-                }
-            }
-            result["cursor_start"] =  pos == -1 ? 0 : pos +1;
-            auto to_match = pos == -1 ? code : code.substr(pos+1, code.size() -(pos+1));
-
-            // check for kw matches
-            for(auto kw : keywords)
-            {
-                if(startswith(kw, to_match))
-                {
-                    matches.push_back(kw);
-                }
-            }
-        }
-
-        result["status"] = "ok";
-        result["cursor_end"] = cursor_pos;
-        result["matches"] =matches;
-
-        return result;
-    };
-
-    nl::json interpreter::inspect_request_impl(const std::string& /*code*/,
-                                               int /*cursor_pos*/,
-                                               int /*detail_level*/)
-    {
-        nl::json jresult;
-        jresult["status"] = "ok";
-        return jresult;
-    };
-
-    nl::json interpreter::is_complete_request_impl(const std::string& /*code*/)
-    {
-        nl::json jresult;
-        jresult["status"] = "complete";
-        return jresult;
-    };
-
-    nl::json interpreter::kernel_info_request_impl()
-    {
-        nl::json result;
-        result["implementation"] = "xsql";
-        result["implementation_version"] = XSQL_VERSION;
-
-        /* The jupyter-console banner for xeus-sql is the following:
-                                            _
-                                           | |
-            __  _____ _   _ ___   ___  __ _| |
-            \ \/ / _ \ | | / __| / __|/ _` | |
-             >  <  __/ |_| \__ \ \__ \ (_| | |
-            /_/\_\___|\__,_|___/ |___/\__, |_|
-                                         | |
-                                         |_|
-           xeus-sql: a Jupyter kernel for SOCI
-           SOCI version: x.x.x
-        */
-
-        std::string banner = R"V0G0N(
-            "                                _    "
-            "                               | |   "
-            "__  _____ _   _ ___   ___  __ _| |   "
-            "\ \/ / _ \ | | / __| / __|/ _` | |   "
-            " >  <  __/ |_| \__ \ \__ \ (_| | |   "
-            "/_/\_\___|\__,_|___/ |___/\__, |_|   "
-            "                             | |     "
-            "                             |_|     "
-            "  xeus-sql: a Jupyter kernel for SOCI"
-            "  XSQL version: ")V0G0N";
-        banner.append(XSQL_VERSION);
-
-        result["banner"] = banner;
-        //TODO: This should change with the language
-        result["language_info"]["name"] = "mysql";
-        result["language_info"]["codemirror_mode"] = "sql";
-        result["language_info"]["version"] = XSQL_VERSION;
-        result["language_info"]["mimetype"] = "";
-        result["language_info"]["file_extension"] = "";
-        return result;
+        return keywords;
     }
 
-    void interpreter::shutdown_request_impl()
-    {
-    }
 
 }
