@@ -10,8 +10,6 @@
 #include <memory>
 #include <iostream>
 #include <signal.h>
-#include <complex.h>
-#include <csignal>
 
 #ifdef __GNUC__
 #include <stdio.h>
