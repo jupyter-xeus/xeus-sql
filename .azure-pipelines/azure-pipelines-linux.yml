@@ -9,7 +9,7 @@ jobs:
           xsql_use_shared_xeus: 0
           xsql_use_shared_xeus_sql: 0
     pool:
-      vmImage: ubuntu-16.04
+      vmImage: ubuntu-20.04
     timeoutInMinutes: 30
     steps:
           
