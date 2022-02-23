@@ -329,7 +329,7 @@ namespace xeus_sql
                 }
                 else
                 {
-                    throw("Database was not loaded.");
+                    throw std::runtime_error("Database was not loaded.");
                 }
             }
         } catch (const std::runtime_error &err) {
