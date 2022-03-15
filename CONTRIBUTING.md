@@ -31,8 +31,9 @@ mkdir build
 cd build
 cmake -D CMAKE_INSTALL_PREFIX=$CONDA_PREFIX ..
 # You can add options like -DXSQL_WITH_SQLITE3 to make the db type as required
-# and we will handle the runtime error for that db
+# and xeus-soci will handle the runtime error for that db. Example:
 # cmake -D CMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DXSQL_WITH_SQLITE3 ..
+# Other options include: XSQL_WITH_POSTGRE_SQL and XSQL_WITH_MYSQL
 make
 make install
 ```
