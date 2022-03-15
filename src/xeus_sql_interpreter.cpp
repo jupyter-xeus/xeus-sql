@@ -312,7 +312,8 @@ namespace xeus_sql
                     if (xv_bindings::case_insentive_equals("SELECT", tokenized_input[0]) ||
                         xv_bindings::case_insentive_equals("DESC", tokenized_input[0]) ||
                         xv_bindings::case_insentive_equals("DESCRIBE", tokenized_input[0]) ||
-                        xv_bindings::case_insentive_equals("SHOW", tokenized_input[0]))
+                        xv_bindings::case_insentive_equals("SHOW", tokenized_input[0]) ||
+                        "--")
                     {
                         nl::json data = process_SQL_input(code, xv_sql_df);
 
