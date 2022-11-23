@@ -16,3 +16,5 @@ dependencies:
   - xtl=0.7.2
   - xvega-bindings=0.0.10
   - xvega=0.0.10
+  # Test dependencies
+  - doctest >= 2.4.6

@@ -53,12 +53,9 @@ OPTION(XSQL_BUILD_XSQL_EXECUTABLE "Build the xsql executable" ON)
 OPTION(XSQL_USE_SHARED_XEUS "Link xsql with the xeus shared library (instead of the static library)" ON)
 OPTION(XSQL_USE_SHARED_XEUS_SQL "Link xsql with the xeus-sql shared library (instead of the static library)" ON)
 
-OPTION(XSQL_DOWNLOAD_GTEST "build gtest from downloaded sources" OFF)
 OPTION(XSQL_BUILD_TESTS "xeus-sql test suite" OFF)
 
 OPTION(CMAKE_USE_WIN32_THREADS_INIT "using WIN32 threads" ON)
-OPTION(gtest_disable_pthreads "Disable uses of pthreads in gtest." ON)
-
 
 # Dependencies
 # ============
@@ -265,11 +262,6 @@ endif()
 
 # Tests
 # =====
-
-if(XSQL_DOWNLOAD_GTEST OR GTEST_SRC_DIR)
-    set(XSQL_BUILD_TESTS ON)
-endif()
-
 
 if(XSQL_BUILD_TESTS)
     add_subdirectory(test)

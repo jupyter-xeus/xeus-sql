@@ -58,7 +58,7 @@ jobs:
             -D CMAKE_PREFIX_PATH=$CONDA_PREFIX \
             -D CMAKE_INSTALL_PREFIX=$CONDA_PREFIX \
             -D CMAKE_INSTALL_LIBDIR=lib \
-            -D XSQL_DOWNLOAD_GTEST=ON \
+            -D XSQL_BUILD_TESTS=ON \
             -D CMAKE_C_COMPILER=$CC \
             -D CMAKE_CXX_COMPILER=$CXX \
             ${{ env.CMAKE_EXTRA_ARGS }}
@@ -68,7 +68,77 @@ jobs:
         run: make -j ${{ steps.cpu-cores.outputs.count }} install
         working-directory: build
 
-     #- name: Test xeus-sql C++
-     #   run: ./test_xeus_sql
-     #   timeout-minutes: 4
-     #   working-directory: build/test
+      - name: Test xeus-sql C++
+        run: ./test_xeus_sql
+        timeout-minutes: 4
+        working-directory: build/test
+
+  test-win:
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2019, windows-2022]
+        build_type: [static_build, shared_build]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: install mamba
+        uses: mamba-org/provision-with-micromamba@main
+        with:
+          environment-file: environment-dev.yml
+          environment-name: xeus-sql
+
+      - name: micromamba shell hook
+        shell: powershell
+        run: |
+          micromamba shell hook -s cmd.exe -p C:\Users\runneradmin\micromamba-root
+
+      - name: Make build directory
+        run: mkdir build
+
+      - name: Static build option
+        if: matrix.build_type == 'static_build'
+        run: |
+          CMAKE_EXTRA_ARGS="$CMAKE_EXTRA_ARGS -DXSQL_BUILD_SHARED=OFF -DXSQL_USE_SHARED_XEUS_SQL=OFF"
+          echo "CMAKE_EXTRA_ARGS=$CMAKE_EXTRA_ARGS" >> $GITHUB_ENV
+
+      - name: Shared build option
+        if: matrix.build_type == 'shared_build'
+        run: |
+          CMAKE_EXTRA_ARGS="$CMAKE_EXTRA_ARGS -DXSQL_BUILD_STATIC=OFF"
+          echo "CMAKE_EXTRA_ARGS=$CMAKE_EXTRA_ARGS" >> $GITHUB_ENV
+
+      - name: cmake configure
+        shell: cmd
+        run: |
+          call C:\Users\runneradmin\micromamba-root\condabin\micromamba.bat activate xeus-sql
+          cmake .. ^
+            -GNinja ^
+            -DCMAKE_BUILD_TYPE=Release ^
+            -DCMAKE_INSTALL_PREFIX="%CONDA_PREFIX%\Library" ^
+            -DXEXTRA_JUPYTER_DATA_DIR=%CONDA_PREFIX%\share\jupyter ^
+            -D XSQL_BUILD_TESTS=ON ^
+            ${{ env.CMAKE_EXTRA_ARGS }}
+        working-directory: build
+
+      - name: build
+        shell: cmd
+        run: |
+          call C:\Users\runneradmin\micromamba-root\condabin\micromamba.bat activate xeus-sql
+          set CL=/MP
+          ninja install
+        working-directory: build
+
+      - name: Test xeus-sql C++
+        shell: cmd /C call {0}
+        run: |
+          micromamba activate xeus-sql
+          test_xeus_sql
+        timeout-minutes: 4
+        working-directory: build/test
+
+
