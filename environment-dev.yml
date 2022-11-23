@@ -2,8 +2,10 @@ name: xeus-sql
 channels:
   - conda-forge
 dependencies:
-  # Builde dependencies
+  # Build dependencies
   - cmake
+  - cxx-compiler
+  - ninja
   # host dependencies
   - cpp-tabulate
   - cppzmq
