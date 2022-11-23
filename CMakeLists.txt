@@ -61,9 +61,9 @@ OPTION(CMAKE_USE_WIN32_THREADS_INIT "using WIN32 threads" ON)
 # ============
 
 # Be sure to use recent versions
-set(xeus_REQUIRED_VERSION 2.0.0)
+set(xeus-zmq_REQUIRED_VERSION 1.0.1)
 
-find_package(xeus ${xeus_REQUIRED_VERSION} REQUIRED)
+find_package(xeus-zmq ${xeus-zmq_REQUIRED_VERSION} REQUIRED)
 find_package(xvega)
 
 find_package(tabulate REQUIRED)
@@ -202,9 +202,9 @@ macro(xsql_create_target target_name linkage output_name)
                                $<INSTALL_INTERFACE:include>)
 
     if (XSQL_USE_SHARED_XEUS)
-        set(XSQL_XEUS_TARGET xeus)
+        set(XSQL_XEUS_TARGET xeus-zmq)
     else ()
-        set(XSQL_XEUS_TARGET xeus-static)
+        set(XSQL_XEUS_TARGET xeus-zmq-static)
     endif ()
 
     target_link_libraries(${target_name} PUBLIC 

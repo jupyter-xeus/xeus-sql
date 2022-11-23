@@ -11,9 +11,9 @@ dependencies:
   - cppzmq
   - nlohmann_json
   - soci-core
-  - xeus=2.0.0
+  - xeus-zmq=1.0.1
   - xproperty=0.11.0
-  - xtl=0.7.2
+  - xtl
   - xvega-bindings=0.0.10
   - xvega=0.0.10
   # Test dependencies
