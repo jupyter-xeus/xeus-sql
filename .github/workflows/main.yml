@@ -58,7 +58,7 @@ jobs:
             -D CMAKE_PREFIX_PATH=$CONDA_PREFIX \
             -D CMAKE_INSTALL_PREFIX=$CONDA_PREFIX \
             -D CMAKE_INSTALL_LIBDIR=lib \
-            -D XSQL_DOWNLOAD_GTEST=ON \
+            -D XSQL_BUILD_TESTS=ON \
             -D CMAKE_C_COMPILER=$CC \
             -D CMAKE_CXX_COMPILER=$CXX \
             ${{ env.CMAKE_EXTRA_ARGS }}
@@ -68,7 +68,7 @@ jobs:
         run: make -j ${{ steps.cpu-cores.outputs.count }} install
         working-directory: build
 
-     #- name: Test xeus-sql C++
-     #   run: ./test_xeus_sql
-     #   timeout-minutes: 4
-     #   working-directory: build/test
+      - name: Test xeus-sql C++
+        run: ./test_xeus_sql
+        timeout-minutes: 4
+        working-directory: build/test

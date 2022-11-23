@@ -10,7 +10,7 @@
 #ifndef TEST_DB_HPP
 #define TEST_DB_HPP
 
-#include "gtest/gtest.h"
+#include "doctest/doctest.h"
 
 #include "xeus-sql/xeus_sql_interpreter.hpp"
 #include "xvega-bindings/utils.hpp"
@@ -18,14 +18,16 @@
 namespace xeus_sql
 {
 
-TEST(xeus_sql_interpreter, tokenizer)
-{
-    std::string code = "\%LOAD database.db";
-    std::vector<std::string> tokenized_code;
-    tokenized_code = xv_bindings::tokenizer(code);
-    EXPECT_EQ(tokenized_code[1], "database.db");
-}
-
+    TEST_SUITE("xeus_sql_interpreter")
+    {
+        TEST_CASE("tokenizer")
+        {
+            std::string code = "\%LOAD database.db";
+            std::vector<std::string> tokenized_code;
+            tokenized_code = xv_bindings::tokenizer(code);
+            REQUIRE_EQ(tokenized_code[1], "database.db");
+        }
+    }
 }
 
 #endif
