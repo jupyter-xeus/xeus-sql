@@ -43,9 +43,6 @@ configure_file (
 # Build options
 # =============
 
-OPTION(XSQL_DISABLE_ARCH_NATIVE "disable -march=native flag" OFF)
-OPTION(XSQL_DISABLE_TUNE_GENERIC "disable -mtune=generic flag" OFF)
-
 OPTION(XSQL_BUILD_STATIC "Build xeus-sql static library" ON)
 OPTION(XSQL_BUILD_SHARED "Split xsql build into executable and library" ON)
 OPTION(XSQL_BUILD_XSQL_EXECUTABLE "Build the xsql executable" ON)
@@ -136,14 +133,6 @@ macro(xsql_set_common_options target_name)
 
         target_compile_options(${target_name} PUBLIC -Wunused-parameter -Wextra -Wreorder)
     
-        # Mtune generic/native
-        if (XSQL_DISABLE_ARCH_NATIVE AND NOT XSQL_DISABLE_TUNE_GENERIC)
-            target_compile_options(${target_name} PUBLIC -mtune=generic)
-        elseif (XSQL_DISABLE_TUNE_GENERIC)
-        else ()
-            target_compile_options(${target_name} PUBLIC -march=native)
-        endif ()
-
         # C++14 flag, setting this flag is failing on Clang
         if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
             CHECK_CXX_COMPILER_FLAG("-std=c++14" HAS_CPP14_FLAG)
