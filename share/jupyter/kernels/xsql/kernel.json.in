@@ -1,7 +1,7 @@
 {
     "display_name": "xsql",
     "argv": [
-        "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_BINDIR@/xsql",
+        "@CMAKE_INSTALL_FULL_BINDIR@/xsql",
         "-f",
         "{connection_file}"
     ],
