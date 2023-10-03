@@ -2,6 +2,6 @@ name: xeus-sql
 channels:
   - conda-forge
 dependencies:
-  - xeus-sql=0.0.8
+  - xeus-sql=0.2.1
   - soci-sqlite
   - soci-core
