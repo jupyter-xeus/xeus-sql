@@ -17,7 +17,7 @@ The xeus team organizes public video meetings. The schedule for future meetings 
 To install the xeus-sql dependencies:
 
 ```bash
-mamba install nlohmann_json xtl cppzmq xeus cpp-tabulate=1.3 xvega xvega-bindings xproperty jupyterlab soci-core compilers cmake -c conda-forge
+mamba install nlohmann_json xtl cppzmq xeus cpp-tabulate>=1.5 xvega xvega-bindings xproperty jupyterlab soci-core compilers cmake -c conda-forge
 ```
 
 #### Known issues
