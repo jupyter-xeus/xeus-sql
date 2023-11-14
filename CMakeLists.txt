@@ -58,7 +58,7 @@ OPTION(CMAKE_USE_WIN32_THREADS_INIT "using WIN32 threads" ON)
 # ============
 
 # Be sure to use recent versions
-set(xeus-zmq_REQUIRED_VERSION 1.0.1)
+set(xeus-zmq_REQUIRED_VERSION 1.1.1)
 
 find_package(xeus-zmq ${xeus-zmq_REQUIRED_VERSION} REQUIRED)
 find_package(xvega)
