@@ -61,11 +61,11 @@ You can install ``xeus-sql`` from source with ``cmake``. This requires that you 
 
 .. code::
 
-    conda install cmake nlohmann_json xtl cppzmq xeus mysql sqlite postgresql cpp-tabulate=1.3 xvega xvega-bindings xproperty jupyterlab compilers -c conda-forge
+    conda install cmake nlohmann_json xtl cppzmq xeus mysql sqlite postgresql cpp-tabulate>=1.5 xvega xvega-bindings xproperty jupyterlab compilers -c conda-forge
 
 .. code::
 
-    mamba install cmake nlohmann_json xtl cppzmq xeus mysql sqlite postgresql cpp-tabulate=1.3 xvega xvega-bindings xproperty jupyterlab compilers -c conda-forge
+    mamba install cmake nlohmann_json xtl cppzmq xeus mysql sqlite postgresql cpp-tabulate>=1.5 xvega xvega-bindings xproperty jupyterlab compilers -c conda-forge
 
 .. code::
 

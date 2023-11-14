@@ -94,7 +94,7 @@ namespace xeus_sql
         for (const soci::row& r : rows)
         {
             if (row_count == 0) {
-                std::vector<variant<std::string, const char*, tabulate::Table>> col_names;
+                tabulate::Table::Row_t col_names;
                 html_table << "<table>\n<tr>\n";
                 for (std::size_t i = 0; i != r.size(); ++i) {
                     std::string name = r.get_properties(i).get_name();
@@ -108,7 +108,7 @@ namespace xeus_sql
             /* Iterates through cols' rows and builds different kinds of
                outputs
             */
-            std::vector<variant<std::string, const char*, tabulate::Table>> row;
+            tabulate::Table::Row_t row;
             html_table << "<tr>\n";
             for(std::size_t i = 0; i != r.size(); ++i)
             {
