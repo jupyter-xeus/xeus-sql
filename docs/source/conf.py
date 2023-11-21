@@ -20,9 +20,9 @@ html_theme_options = {
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 def setup(app):
-    app.add_stylesheet("main_stylesheet.css")
+    app.add_css_file("main_stylesheet.css")
 
-extensions = ['breathe']
+extensions = ['breathe', 'sphinx_rtd_theme']
 breathe_projects = { 'xeus-sql': '../xml' }
 templates_path = ['_templates']
 source_suffix = '.rst'
