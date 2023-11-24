@@ -7,6 +7,13 @@
 PostgreSQL
 ==========
 
+**Requirements:** ``soci-postgresql``
+
+.. code::
+
+    conda install soci-postgresql -c conda-forge
+
+
 Linux
 -----
 
@@ -16,7 +23,7 @@ If you're running ``xeus-sql`` with a conda-forge PostgreSQL build, you will hav
 
     sudo ln -s /var/run/postgresql/.s.PGSQL.5432 /tmp/.s.PGSQL.5432
 
-Create an user:
+Create a user:
 
 .. code::
 
@@ -28,11 +35,18 @@ Start the service:
 
     sudo service postgresql start sudo -u $USER_NAME psql
 
-Create a database using the example available on this repository:
+Create a new database:
 
 .. code::
 
-    pg_restore --dbname=newdvdrental -U $USER_NAME pathto/xeus-sql/examples/dvdrental.tar
+    createdb newdvdrental
+
+
+Use the example available on this repository:
+
+.. code::
+
+    pg_restore --dbname=newdvdrental -U $USER_NAME path/to/xeus-sql/examples/dvdrental.tar
 
 You can now run the example contained in ``examples/PostgreSQL.ipynb``.
 

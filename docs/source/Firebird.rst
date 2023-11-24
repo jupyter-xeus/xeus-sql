@@ -15,7 +15,7 @@ Installation
 
 Install Firebird using your preferred method. You will likely need the developer's version of Firebird for it to be picked up by SOCI.
 
-If you're using a system's package manager your Firebird installation won't be picked up by the SOCI package available on ``conda-forge`` meaning you will either have to install SOCI from source or download it from SOCI page_.
+If you're using a system's package manager, your Firebird installation won't be picked up by the SOCI package available on ``conda-forge``, meaning that you will either have to install SOCI from source or download it from SOCI `downloads page <https://sourceforge.net/projects/soci/>`_.
 
 Make sure you're installing SOCI after you have Firebird in your system.
 
@@ -36,19 +36,19 @@ To install SOCI from source use the following flags when building:
 
     make install
 
-Just make sure to do that in the same environment as the rest of your installation is going.
+Just make sure to do that in the same environment as the rest of your installation.
 
 Usage
 *****
 
-Either way you decide to conduce your installation process you have to make sure that the directory where your database is is accessible by Jupyter Lab. To do that you can add the user of the machine to the ``firebird`` group:
+Either way you decide to conduct your installation process you have to make sure that the directory where your database is is accessible by JupyterLab. To do that, you can add the user of the machine to the ``firebird`` group:
 
 .. code::
 
     sudo chown firebird:firebird $DATABASE_NAME
     sudo usermod -a -G firebird $USER_NAME
 
-That's all that there's to it. You can now run the example contained in ``examples/Firebird.ipynb``.
+That's all there's to it. You can now run the example contained in ``examples/Firebird.ipynb``.
 
 More information about Firebird can be found in the SOCI documentation_.
 
