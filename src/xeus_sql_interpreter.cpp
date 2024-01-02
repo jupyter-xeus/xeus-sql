@@ -37,7 +37,7 @@
 #endif
 
 namespace xeus_sql
-{       
+{
     // implemented at the end of the file
     // for better  readability
     const std::array<std::string, 826> & get_keywords();
@@ -312,7 +312,8 @@ namespace xeus_sql
                     if (xv_bindings::case_insentive_equals("SELECT", tokenized_input[0]) ||
                         xv_bindings::case_insentive_equals("DESC", tokenized_input[0]) ||
                         xv_bindings::case_insentive_equals("DESCRIBE", tokenized_input[0]) ||
-                        xv_bindings::case_insentive_equals("SHOW", tokenized_input[0]))
+                        xv_bindings::case_insentive_equals("SHOW", tokenized_input[0]) ||
+                        xv_bindings::case_insentive_equals("--", tokenized_input[0]))
                     {
                         nl::json data = process_SQL_input(code, xv_sql_df);
 
@@ -379,7 +380,7 @@ namespace xeus_sql
         {
             auto pos = -1;
             for(int i=code.size()-1; i>=0; --i)
-            {   
+            {
                 if(!is_identifier(code[i]))
                 {
                     pos = i;
