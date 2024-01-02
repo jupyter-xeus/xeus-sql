@@ -159,21 +159,21 @@ namespace xeus_sql
         }
         html_table << "</table>";
         const sec duration = clock::now() - before;
-        std::stringstream footer;
-        footer << "\n";
+        std::stringstream rows_info;
+        rows_info << "\n";
         if (row_count == 0) {
-            footer << std::fixed << std::setprecision(2) << "Empty set ("
+            rows_info << std::fixed << std::setprecision(2) << "Empty set ("
                        << duration.count() << " sec)";
         } else if (row_count == 1) {
-            footer << std::fixed << std::setprecision(2) << "1 row in set ("
+            rows_info << std::fixed << std::setprecision(2) << "1 row in set ("
                        << duration.count() << " sec)";
         } else {
-            footer << std::fixed << std::setprecision(2) << row_count
+            rows_info << std::fixed << std::setprecision(2) << row_count
                        << " rows in set (" << duration.count() << " sec)";
         }
 
-        pub_data["text/plain"] = plain_table.str() + footer.str();
-        pub_data["text/html"] = html_table.str() + footer.str();
+        pub_data["text/plain"] = rows_info.str() + plain_table.str();
+        pub_data["text/html"] = rows_info.str() + html_table.str();
 
         return pub_data;
     }
