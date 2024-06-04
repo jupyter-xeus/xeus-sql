@@ -178,18 +178,17 @@ namespace xeus_sql
         return pub_data;
     }
 
-    nl::json interpreter::execute_request_impl(int execution_counter,
-                                               const std::string& code,
-                                               bool /*silent*/,
-                                               bool /*store_history*/,
-                                               nl::json /*user_expressions*/,
-                                               bool /*allow_stdin*/)
+    void execute_request_impl(send_reply_callback cb,
+                                  int execution_counter,
+                                  const std::string& code,
+                                  execute_request_config /*config*/,
+                                  nl::json user_expressions)
     {
         auto ok = []() {
             nl::json jresult;
             jresult["status"] = "ok";
             jresult["payload"] = nl::json::array();
-            jresult["user_expressions"] = nl::json::object();
+            jresult["user_expressions"] = user_expressions;
             return jresult;
         };
 
@@ -247,7 +246,8 @@ namespace xeus_sql
                                              std::move(chart),
                                              nl::json::object());
 
-                    return ok();
+                    cb(ok());
+                    return;
                 } else if (xv_bindings::case_insentive_equals("VEGA_LITE", tokenized_input[0])) {
                     if (tokenized_input.size() < 2) {
                         throw std::runtime_error("invalid input: " + code);
@@ -269,7 +269,8 @@ namespace xeus_sql
                         auto bundle = nl::json::object();
                         bundle["text/plain"] = "SET " + spec_name + " success.";
                         publish_execution_result(execution_counter, std::move(bundle), nl::json::object());
-                        return ok();
+                        cb(ok());
+                        return;
                     }
                     nl::json j;
                     auto v = specs.find(tokenized_input[1]);
@@ -297,7 +298,8 @@ namespace xeus_sql
                     auto bundle = nl::json::object();
                     bundle["application/vnd.vegalite.v3+json"] = j;
                     publish_execution_result(execution_counter, std::move(bundle), nl::json::object());
-                    return ok();
+                    cb(ok());
+                    return;
                 }
 
                 /* Parses LOAD magic */
@@ -334,18 +336,18 @@ namespace xeus_sql
                 }
             }
         } catch (const std::runtime_error &err) {
-            return handle_exception((std::string)err.what());
+            cb(handle_exception((std::string)err.what()));
 #ifdef USE_POSTGRE_SQL
         } catch (const soci::postgresql_soci_error &err) {
-            return handle_exception((std::string)err.what());
+            cb(handle_exception((std::string)err.what()));
 #endif
 #ifdef USE_MYSQL
         } catch (const soci::mysql_soci_error &err) {
-            return handle_exception((std::string)err.what());
+            cb(handle_exception((std::string)err.what()));
 #endif
 #ifdef USE_SQLITE3
         } catch (const soci::sqlite3_soci_error &err) {
-            return handle_exception((std::string)err.what());
+            cb(handle_exception((std::string)err.what()));
 #endif
         } catch (...) {
             // https:  // stackoverflow.com/a/54242936/1203241
@@ -355,10 +357,11 @@ namespace xeus_sql
                 std::rethrow_exception(curr_excp);
                 }
             } catch (const std::exception &err) {
-                return handle_exception((std::string)err.what());
+                cb(handle_exception((std::string)err.what()));
             }
         }
-        return ok();
+        cb(ok());
+        return;
     }
     nl::json interpreter::complete_request_impl(const std::string& raw_code,
                                                 int cursor_pos)
