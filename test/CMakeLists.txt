@@ -59,6 +59,8 @@ set_target_properties(test_xeus_sql PROPERTIES
     INSTALL_RPATH_USE_LINK_PATH TRUE
 )
 
+target_compile_features(test_xeus_sql PRIVATE cxx_std_17)
+
 if (XSQL_BUILD_SHARED)
     set(XSQL_TEST_LINK_TARGET xeus-sql)
 else()
