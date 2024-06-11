@@ -14,7 +14,7 @@ dependencies:
   - xeus>=5.0,<=6
   - xeus-zmq
   - xproperty=0.11.0
-  - xvega-bindings=0.0.10
-  - xvega=0.0.10
+  - xvega-bindings>=0.1.0
+  - xvega=>0.1.0
   # Test dependencies
   - doctest >= 2.4.6
