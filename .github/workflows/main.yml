@@ -116,6 +116,7 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release ^
             -DCMAKE_INSTALL_PREFIX="%CONDA_PREFIX%\Library" ^
             -DXEXTRA_JUPYTER_DATA_DIR=%CONDA_PREFIX%\share\jupyter ^
+            -D CMAKE_CXX_FLAGS=" /D_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR" ^
             -D XSQL_BUILD_TESTS=ON ^
             ${{ env.CMAKE_EXTRA_ARGS }}
         working-directory: build

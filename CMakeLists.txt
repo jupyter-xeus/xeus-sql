@@ -133,7 +133,7 @@ macro(xsql_set_common_options target_name)
 
         target_compile_options(${target_name} PUBLIC -Wunused-parameter -Wextra -Wreorder)
     
-        # C++14 flag, setting this flag is failing on Clang
+        # C++147 flag, setting this flag is failing on Clang
         if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
             CHECK_CXX_COMPILER_FLAG("-std=c++17" HAS_CPP17_FLAG)
             if (HAS_CPP17_FLAG)
