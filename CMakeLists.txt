@@ -130,10 +130,10 @@ macro(xsql_set_common_options target_name)
     if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR
         CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR
         CMAKE_CXX_COMPILER_ID MATCHES "Intel")
-
         target_compile_options(${target_name} PUBLIC -Wunused-parameter -Wextra -Wreorder)
-        target_compile_features(${target_name} PRIVATE cxx_std_17)
-    endif ()
+     endif ()
+
+    target_compile_features(${target_name} PRIVATE cxx_std_17)
 
     if (APPLE)
         set_target_properties(${target_name} PROPERTIES
