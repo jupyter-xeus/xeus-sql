@@ -132,22 +132,7 @@ macro(xsql_set_common_options target_name)
         CMAKE_CXX_COMPILER_ID MATCHES "Intel")
 
         target_compile_options(${target_name} PUBLIC -Wunused-parameter -Wextra -Wreorder)
-    
-        # C++147 flag, setting this flag is failing on Clang
-        if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-            CHECK_CXX_COMPILER_FLAG("-std=c++17" HAS_CPP17_FLAG)
-            if (HAS_CPP17_FLAG)
-                target_compile_features(${target_name} PUBLIC cxx_std_17)
-            else ()
-                message(FATAL_ERROR "Unsupported compiler -- xeus-sql requires C++17 support!")
-            endif ()
-        else ()
-            target_compile_features(${target_name} PUBLIC cxx_std_17)
-        endif ()
-        set_target_properties(${target_name}  PROPERTIES
-            CXX_STANDARD 17
-            CXX_EXTENSIONS OFF
-        )
+        target_compile_features(${target_name} PRIVATE cxx_std_17)
     endif ()
 
     if (APPLE)
