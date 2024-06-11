@@ -144,7 +144,7 @@ macro(xsql_set_common_options target_name)
         else ()
             target_compile_features(${target_name} PRIVATE cxx_std_17)
         endif ()
-        set_target_properties((${target_name}  PROPERTIES
+        set_target_properties(${target_name}  PROPERTIES
             CXX_STANDARD 17
             CXX_EXTENSIONS OFF
         )
