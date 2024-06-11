@@ -178,13 +178,13 @@ namespace xeus_sql
         return pub_data;
     }
 
-    void execute_request_impl(send_reply_callback cb,
+    void interpreter::execute_request_impl(send_reply_callback cb,
                                   int execution_counter,
                                   const std::string& code,
-                                  execute_request_config /*config*/,
+                                  xeus::execute_request_config /*config*/,
                                   nl::json user_expressions)
     {
-        auto ok = []() {
+        auto ok = [&]() {
             nl::json jresult;
             jresult["status"] = "ok";
             jresult["payload"] = nl::json::array();
