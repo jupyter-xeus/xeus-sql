@@ -63,7 +63,7 @@ set(xeus-zmq_REQUIRED_VERSION 1.1.1)
 find_package(xeus-zmq ${xeus-zmq_REQUIRED_VERSION} REQUIRED)
 find_package(xvega)
 
-find_package(tabulate REQUIRED)
+#find_package(tabulate REQUIRED)
 find_package(Threads REQUIRED)
 
 find_package(Soci REQUIRED MODULE)
