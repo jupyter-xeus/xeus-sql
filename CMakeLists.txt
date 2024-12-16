@@ -63,7 +63,7 @@ set(xeus-zmq_REQUIRED_VERSION 1.1.1)
 find_package(xeus-zmq ${xeus-zmq_REQUIRED_VERSION} REQUIRED)
 find_package(xvega)
 
-find_package(tabulate REQUIRED)
+#find_package(tabulate REQUIRED)
 find_package(Threads REQUIRED)
 
 find_package(Soci REQUIRED MODULE)
@@ -130,22 +130,10 @@ macro(xsql_set_common_options target_name)
     if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR
         CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR
         CMAKE_CXX_COMPILER_ID MATCHES "Intel")
-
         target_compile_options(${target_name} PUBLIC -Wunused-parameter -Wextra -Wreorder)
-    
-        # C++14 flag, setting this flag is failing on Clang
-        if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-            CHECK_CXX_COMPILER_FLAG("-std=c++14" HAS_CPP14_FLAG)
-            if (HAS_CPP14_FLAG)
-            target_compile_features(${target_name} PRIVATE cxx_std_14)
-            else ()
-                message(FATAL_ERROR "Unsupported compiler -- xeus-sql requires C++14 support!")
-            endif ()
-        else ()
-            target_compile_features(${target_name} PRIVATE cxx_std_14)
-        endif ()
+     endif ()
 
-    endif ()
+    target_compile_features(${target_name} PRIVATE cxx_std_17)
 
     if (APPLE)
         set_target_properties(${target_name} PROPERTIES

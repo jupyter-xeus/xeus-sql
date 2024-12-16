@@ -21,7 +21,8 @@
 #include "xeus/xkernel.hpp"
 #include "xeus/xkernel_configuration.hpp"
 
-#include "xeus-zmq/xserver_shell_main.hpp"
+#include "xeus-zmq/xserver_zmq_split.hpp"
+#include "xeus-zmq/xzmq_context.hpp"
 
 #include "xeus-sql/xeus_sql_interpreter.hpp"
 
@@ -79,7 +80,7 @@ int main(int argc, char* argv[])
     // Load configuration file
     std::string file_name = extract_filename(argc, argv);
 
-    auto context = xeus::make_context<zmq::context_t>();
+    std::unique_ptr<xeus::xcontext> context = xeus::make_zmq_context();
 
     // Create interpreter instance
     using interpreter_ptr = std::unique_ptr<xeus_sql::interpreter>;
