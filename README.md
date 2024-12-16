@@ -1,5 +1,5 @@
 # xeus-sql
-[![Build Status](https://dev.azure.com/jupyter-xeus/jupyter-xeus/_apis/build/status/jupyter-xeus.xeus-sql?branchName=master)](https://dev.azure.com/jupyter-xeus/jupyter-xeus/_build/latest?definitionId=9&branchName=master)
+[![GithubActions](https://github.com/jupyter-xeus/xeus-sql/actions/workflows/main.yml/badge.svg)](https://github.com/jupyter-xeus/xeus-sql/actions/workflows/main.yml)
 [![Join the chat at https://gitter.im/QuantStack/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/QuantStack/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Documentation Status](https://readthedocs.org/projects/xeus-sql/badge/?version=latest)](https://xeus-sql.readthedocs.io/en/latest/?badge=latest)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jupyter-xeus/xeus-sql/stable?urlpath=lab/tree/examples/SQLite.ipynb)
@@ -76,7 +76,8 @@ https://xeus-sql.readthedocs.io/en/latest/
 
 | `xeus-sql` | `xeus-zmq`      | `tabulate`     | `nlohmann_json`    | `xproperty` | `xvega-bindings` | `soci-core` |
 |------------|-----------------|----------------|--------------------|-------------|------------------|-------------|
-| master     | >=1.0.1, <2.0   | >=1.4\|>=3.0.0 | >= 0.0.10, <3.10.0 | >=0.11.0    | >=0.0.10         | >=4.0.1     |
+| main       | >=3.1.0, <4.0   | >=1.4\|>=3.0.0 | >= 0.0.10, <3.10.0 | >=0.11.0    | >=0.0.10         | >=4.0.1     |
+| 0.3.0      | >=3.1.0, <4.0   | >=1.4\|>=3.0.0 | >= 0.0.10, <3.10.0 | >=0.11.0    | >=0.0.10         | >=4.0.1     |
 | 0.2.1      | >=1.0.1, <2.0   | >=1.4\|>=3.0.0 | >= 0.0.10, <3.10.0 | >=0.11.0    | >=0.0.10         | >=4.0.1     |
 | 0.2.0      | >=1.0.1, <2.0   | >=1.4\|>=3.0.0 | >= 0.0.10, <3.10.0 | >=0.11.0    | >=0.0.10         | >=4.0.1     |
 
@@ -94,7 +95,7 @@ These are optional dependencies that come by default with `xeus-sql` but may or 
 
 | `xeus-sql` | `PostgreSQL` | `SQLite`    | `MySQL`      | `soci-sqlite`, `soci-postgres`, `soci-mysql` |
 |------------|--------------|-------------|--------------|----------------------------------------------|
-| master     | >=3.30.1, <4 | >=3.0.0, <4 | >=1.3.0,<2.0 | >=4.0.1                                      |
+| main       | >=3.30.1, <4 | >=3.0.0, <4 | >=1.3.0,<2.0 | >=4.0.1                                      |
 | <=0.1.5    | >=3.30.1, <4 | >=3.0.0, <4 | >=1.3.0,<2.0 | >=4.0.1                                      |
 
 ## Contributing
