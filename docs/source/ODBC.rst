@@ -1,4 +1,5 @@
-.. Copyright (c) 2025, Chiara Marmo
+.. Copyright (c) 2020, Mariana Meireles
+                 2025, Chiara Marmo
 
    Distributed under the terms of the BSD 3-Clause License.
 
