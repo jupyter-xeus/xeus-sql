@@ -6,3 +6,5 @@ channels:
 dependencies:
   - breathe
   - sphinx_rtd_theme
+  - pip:
+    - sphinx-tabs
