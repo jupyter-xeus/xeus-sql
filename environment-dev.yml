@@ -3,7 +3,7 @@ channels:
   - conda-forge
 dependencies:
   # Build dependencies
-  - cmake
+  - cmake <4
   - cxx-compiler
   - ninja
   # host dependencies
