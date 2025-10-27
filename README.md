@@ -1,6 +1,5 @@
 # xeus-sql
 [![GithubActions](https://github.com/jupyter-xeus/xeus-sql/actions/workflows/main.yml/badge.svg)](https://github.com/jupyter-xeus/xeus-sql/actions/workflows/main.yml)
-[![Join the chat at https://gitter.im/QuantStack/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/QuantStack/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Documentation Status](https://readthedocs.org/projects/xeus-sql/badge/?version=latest)](https://xeus-sql.readthedocs.io/en/latest/?badge=latest)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jupyter-xeus/xeus-sql/stable?urlpath=lab/tree/examples/SQLite.ipynb)
 [![Zulip](https://img.shields.io/badge/social_chat-zulip-blue.svg)](https://jupyter.zulipchat.com/#narrow/channel/539737-Jupyter-Kernels)
