@@ -67,7 +67,7 @@ https://xeus-sql.readthedocs.io/en/latest/
 
 - [xeus](https://github.com/jupyter-xeus/xeus)
 - [Tabulate](https://github.com/p-ranav/tabulate)
-- [xvega](https://github.com/Quantstack/xvega)
+- [xvega](https://github.com/jupyter-xeus/xvega)
 - [SQLite\*](https://github.com/sqlite/sqlite)
 - [PostgreSQL\*](https://github.com/postgres)
 - [MySQL\*](https://github.com/mysql/mysql-server)
