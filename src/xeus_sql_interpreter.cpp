@@ -22,6 +22,7 @@
 
 #include "tabulate/table.hpp"
 #include "xeus/xinterpreter.hpp"
+#include "xeus/xhelper.hpp"
 
 #include "xeus-sql/xeus_sql_interpreter.hpp"
 #include "xeus-sql/soci_handler.hpp"
@@ -185,20 +186,14 @@ namespace xeus_sql
                                   nl::json user_expressions)
     {
         auto ok = [&]() {
-            nl::json jresult;
-            jresult["status"] = "ok";
-            jresult["payload"] = nl::json::array();
-            jresult["user_expressions"] = user_expressions;
-            return jresult;
+            return xeus::create_successful_reply(nl::json::array(), user_expressions);
         };
 
         std::vector<std::string> traceback;
         auto handle_exception = [&](std::string what) {
             nl::json jresult;
-            jresult["status"] = "error";
-            jresult["ename"] = "Error";
-            jresult["evalue"] = what;
-            traceback.push_back((std::string)jresult["ename"] + ": " + what);
+            traceback.push_back("Error: " + what);
+            nl::json result = xeus::create_error_reply("Error", what, traceback);
             publish_execution_error(jresult["ename"], jresult["evalue"], traceback);
             traceback.clear();
             return jresult;
@@ -377,7 +372,7 @@ namespace xeus_sql
         // and discard the right side of the curser pos
         const auto code = raw_code.substr(0, cursor_pos);
 
-
+        int cursor_start = 0;
         // keyword matches
         // ............................
         {
@@ -390,7 +385,7 @@ namespace xeus_sql
                     break;
                 }
             }
-            result["cursor_start"] =  pos == -1 ? 0 : pos +1;
+            cursor_start = pos + 1;
             auto to_match = pos == -1 ? code : code.substr(pos+1, code.size() -(pos+1));
 
             // check for kw matches
@@ -403,35 +398,23 @@ namespace xeus_sql
             }
         }
 
-        result["status"] = "ok";
-        result["cursor_end"] = cursor_pos;
-        result["matches"] =matches;
-
-        return result;
+        return xeus::create_complete_reply(matches, cursor_start, cursor_pos, nl::json::object());
     };
 
     nl::json interpreter::inspect_request_impl(const std::string& /*code*/,
                                                int /*cursor_pos*/,
                                                int /*detail_level*/)
     {
-        nl::json jresult;
-        jresult["status"] = "ok";
-        return jresult;
+        return xeus::create_inspect_reply(false);
     };
 
     nl::json interpreter::is_complete_request_impl(const std::string& /*code*/)
     {
-        nl::json jresult;
-        jresult["status"] = "complete";
-        return jresult;
+        return xeus::create_is_complete_reply("unknown");
     };
 
     nl::json interpreter::kernel_info_request_impl()
     {
-        nl::json result;
-        result["implementation"] = "xsql";
-        result["implementation_version"] = XSQL_VERSION;
-
         /* The jupyter-console banner for xeus-sql is the following:
                                             _
                                            | |
@@ -458,21 +441,39 @@ namespace xeus_sql
             "  XSQL version: ")V0G0N";
         banner.append(XSQL_VERSION);
 
-        result["banner"] = banner;
-        //TODO: This should change with the language
-        result["language_info"]["name"] = "mysql";
-        result["language_info"]["codemirror_mode"] = "sql";
-        result["language_info"]["version"] = XSQL_VERSION;
-        result["language_info"]["mimetype"] = "";
-        result["language_info"]["file_extension"] = "";
-        result["status"] = "ok";
-        return result;
+        std::string language_name =
+#ifdef USE_POSTGRE_SQL
+            "PostgreSQL";
+#elif defined(USE_SQLITE3)
+            "SQLite3"
+#else
+            "MySQL";
+#endif
+
+        nl::json rep = xeus::create_info_reply(
+            "xsql",
+            XSQL_VERSION,
+            language_name,
+            XSQL_VERSION,
+            "", // language mimetype
+            "", // language file extension
+            "", // pygments lexer
+            std::string("sql"),
+            "",
+            banner
+        );
+        return rep;
     }
 
-    void interpreter::shutdown_request_impl()
+    nl::json interpreter::shutdown_request_impl(bool restart)
     {
+        return xeus::create_shutdown_reply(false);
     }
 
+    nl::json interpreter::interrupt_request_impl()
+    {
+        return xeus::create_interrupt_reply();
+    }
 
     const std::array<std::string, 826> & get_keywords()
     {

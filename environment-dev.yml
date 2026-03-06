@@ -11,7 +11,7 @@ dependencies:
   - cppzmq
   - nlohmann_json
   - soci-core
-  - xeus-zmq>=3.1.1,<4
+  - xeus-zmq>=4,<5
   - xproperty
   - xvega-bindings>=0.1.1
   - xvega>=0.1.3
