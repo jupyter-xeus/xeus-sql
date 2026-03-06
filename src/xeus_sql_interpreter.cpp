@@ -465,7 +465,7 @@ namespace xeus_sql
         return rep;
     }
 
-    nl::json interpreter::shutdown_request_impl(bool restart)
+    nl::json interpreter::shutdown_request_impl(bool /*restart*/)
     {
         return xeus::create_shutdown_reply(false);
     }
