@@ -189,14 +189,12 @@ namespace xeus_sql
             return xeus::create_successful_reply(nl::json::array(), user_expressions);
         };
 
-        std::vector<std::string> traceback;
         auto handle_exception = [&](std::string what) {
-            nl::json jresult;
+            std::vector<std::string> traceback;
             traceback.push_back("Error: " + what);
             nl::json result = xeus::create_error_reply("Error", what, traceback);
-            publish_execution_error(jresult["ename"], jresult["evalue"], traceback);
-            traceback.clear();
-            return jresult;
+            publish_execution_error(result["ename"], result["evalue"], traceback);
+            return result;
         };
 
         // we only need to tokenize the first line
@@ -332,9 +330,11 @@ namespace xeus_sql
             }
         } catch (const std::runtime_error &err) {
             cb(handle_exception((std::string)err.what()));
+            return;
 #ifdef USE_POSTGRE_SQL
         } catch (const soci::postgresql_soci_error &err) {
             cb(handle_exception((std::string)err.what()));
+            return;
 #endif
 #ifdef USE_MYSQL
         } catch (const soci::mysql_soci_error &err) {
@@ -343,6 +343,7 @@ namespace xeus_sql
 #ifdef USE_SQLITE3
         } catch (const soci::sqlite3_soci_error &err) {
             cb(handle_exception((std::string)err.what()));
+            return;
 #endif
         } catch (...) {
             // https:  // stackoverflow.com/a/54242936/1203241
@@ -353,6 +354,7 @@ namespace xeus_sql
                 }
             } catch (const std::exception &err) {
                 cb(handle_exception((std::string)err.what()));
+                return;
             }
         }
         cb(ok());
