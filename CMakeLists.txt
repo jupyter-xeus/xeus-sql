@@ -66,7 +66,7 @@ find_package(xvega)
 #find_package(tabulate REQUIRED)
 find_package(Threads REQUIRED)
 
-find_package(Soci REQUIRED MODULE)
+find_package(Soci CONFIG)
 
 # https://stackoverflow.com/a/15212881/1203241
 OPTION(XSQL_WITH_POSTGRE_SQL "Option to require PostgreSQL" OFF)
@@ -187,7 +187,7 @@ macro(xsql_create_target target_name linkage output_name)
     target_link_libraries(${target_name} PUBLIC 
       ${XSQL_XEUS_TARGET}
       xvega
-      ${SOCI_LIBRARY}
+      SOCI::Core
     )
 
     # find_package(Threads) # TODO: add Threads as a dependence of xeus-static?
